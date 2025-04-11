@@ -1,0 +1,32 @@
+{
+  "name": "backend-server",
+  "version": "1.0.0",
+  "description": "Backend server for GradWise ",
+  "keywords": [
+    "FullStack",
+    "Hackathon2025",
+    "Backend"
+  ],
+  "homepage": "https://github.com/yashgoel-711/GradWise-#readme",
+  "bugs": {
+    "url": "https://github.com/yashgoel-711/GradWise-/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yashgoel-711/GradWise-.git"
+  },
+  "license": "ISC",
+  "author": "Yash Goel",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --env-file=.env src/index.js",
+    "dev": "nodemon --env-file=.env src/index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.13.2"
+  },
+  "devDependencies": {}
+}
