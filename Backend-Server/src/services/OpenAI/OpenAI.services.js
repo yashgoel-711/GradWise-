@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const OPENROUTER_API_KEY = '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'; // Replace with your OpenRouter API key
+const OPENROUTER_API_KEY = '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'; // Replace with your OpenRouter API key
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 
