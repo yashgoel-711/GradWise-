@@ -28,6 +28,7 @@ const AiReq = async (prompt)=>{
         return response.data.choices[0].message.content;
       } catch (error) {
         console.error('Error:', error);
+        
         return null;
       }
 
