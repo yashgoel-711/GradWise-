@@ -1,6 +1,6 @@
-import AiReq from "../services/OpenAI/OpenAI.services";
-import { apiError } from "../utils/apiError.utils";
-import { asyncAwaitHandler } from "../utils/asyncAwaitHandler.utils";
+import {AiReq} from "../services/OpenAI/OpenAI.services.js";
+import { apiError } from "../utils/apiError.utils.js";
+import { asyncAwaitHandler } from "../utils/asyncAwaitHandler.utils.js";
 import { apiResponse } from "../utils/apiResponse.utils.js";
 
 
@@ -17,7 +17,7 @@ const Aihandle = asyncAwaitHandler(async (req,res)=>{
     console.log(response)
     return res.status(200).json(
         new apiResponse(200,{
-            "response": response,
+            "response": response
         })
     )
 

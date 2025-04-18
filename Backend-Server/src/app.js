@@ -18,6 +18,6 @@ import studentRouter from "./routes/student.routes.js"
 import aiRouter from "./routes/ai.routes.js"
 
 app.use("/student",studentRouter)
-app.use('/ai/api',aiRouter)
+app.use('/ai',aiRouter)
 
 export {app}

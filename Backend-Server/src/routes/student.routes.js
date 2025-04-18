@@ -12,4 +12,5 @@ router.route('/logout-Student').post(verifyStudentJWT , logoutStudent)
 
 
 
+
 export default router 

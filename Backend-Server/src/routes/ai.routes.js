@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { Aihandle } from '../controllers/AiTesting.controller'
+import { Aihandle } from '../controllers/AiTesting.controller.js'
 const router = Router()
 router.route('/api/test').post(Aihandle)
  
