@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const OPENROUTER_API_KEY = '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'; // Replace with your OpenRouter API key
+const OPENROUTER_API_KEY = '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'; // Replace with your OpenRouter API key
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 
@@ -9,11 +9,11 @@ const AiReq = async (prompt)=>{
         const response = await axios.post(
           OPENROUTER_API_URL,
           {
-            model: 'openai/gpt-3.5-turbo', 
+            model: 'google/gemma-3-4b-it:free', 
 
             messages: [
               { role: 'user',
-                 content: prompt 
+                 content: prompt
                 }
             ],
           },
@@ -32,4 +32,4 @@ const AiReq = async (prompt)=>{
       }
 
 }
-export default AiReq
+export {AiReq}
