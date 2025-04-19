@@ -15,7 +15,9 @@ app.use(cookieParser())
 
 
 import studentRouter from "./routes/student.routes.js"
+import aiRouter from "./routes/ai.routes.js"
 
 app.use("/student",studentRouter)
+app.use('/ai',aiRouter)
 
 export {app}
