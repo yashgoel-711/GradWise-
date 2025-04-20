@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const OPENROUTER_API_KEY = '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'; // Replace with your OpenRouter API key
+const OPENROUTER_API_KEY = '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'; // Replace with your OpenRouter API key
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 
@@ -32,4 +32,76 @@ const AiReq = async (prompt)=>{
       }
 
 }
-export {AiReq}
+// const Ainvidia = async (prompt) => {
+//   try {
+//     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+//       method: "POST",
+//       headers: {
+//         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+//         // "HTTP-Referer": "<YOUR_SITE_URL>", // Optional
+//         // "X-Title": "<YOUR_SITE_NAME>",     // Optional
+//         "Content-Type": "application/json"
+//       },
+//       body: JSON.stringify({
+//         model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
+//         messages: [
+//           {
+//             role: "user",
+//             content: prompt
+//           }
+//         ]
+//       })
+//     });
+
+//     const data = await response.json();
+
+//     console.log(typeof data); // should log "object"
+//     console.log(data.choices[0].message.content); // access the response content
+//     return data.choices[0].message.content;
+//   } catch (error) {
+//     console.error("Error fetching AI response:", error);
+//     return null;
+//   }
+// };
+const Ainvidia = async (prompt) => {
+  try {
+    console.log(OPENROUTER_API_KEY)
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+    console.log("Full API response:", data);
+
+    if (!data?.choices?.[0]?.message?.content) {
+      throw new Error("Invalid response structure from OpenRouter AI");
+    }
+
+    return data.choices[0].message.content;
+
+  } catch (error) {
+    console.error("Error fetching AI response:", error.message);
+    throw {
+      statusCode: 408,
+      success: false,
+      errors: [error.message],
+      data: null
+    };
+  }
+};
+
+
+export {AiReq,Ainvidia}
