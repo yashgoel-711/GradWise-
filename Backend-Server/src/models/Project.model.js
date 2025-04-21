@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { apiError } from "../utils/apiError.utils";
 
 const projectSchema = new mongoose.Schema({
 
@@ -25,5 +26,11 @@ const projectSchema = new mongoose.Schema({
     }
 
   }, { timestamps: true });
+  projectSchema.methods.GetInfoProjectDetails = async function(id){
+    if(!id){
+      throw new apiError(400,"give the  id of the project details")
+    }
+  }
+   
 
 export const Project = mongoose.model("Project",projectSchema)
