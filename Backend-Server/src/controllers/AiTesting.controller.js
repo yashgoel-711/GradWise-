@@ -5,33 +5,42 @@ import { apiResponse } from "../utils/apiResponse.utils.js";
 
 const Aihandle = asyncAwaitHandler(async (req, res) => {
   const { name, year } = req.student;
+  const course = "B.Tech";
 
-  // Validate input from req.student
-  if (!name  || !year) {
-    throw new apiError(400, "Student information incomplete: name, course, and year are required");
+  if (!name || !year) {
+    throw new apiError(400, "Student information incomplete: name and year are required");
   }
 
-  // Generate AI prompt using student info
   const prompt = `
-    Hi AI, my name is ${name}. I am currently pursuing a course in btech and I am in year ${year}.
-    Can you create a personalized career roadmap for me?
-    Include suggestions like skills to learn, technologies to focus on, internships, projects, certifications, and possible career paths in btech.
-  `;
+You are a career advisor AI.
 
-  // Call Ainvidia to get AI-generated roadmap
+The student name is ${name}. They are studying ${course}, currently in year ${year}.
+
+Give a clear, concise career roadmap in bullet points only.
+Only include action steps, skills to learn, certifications, internships, or projects.
+Do not include any introduction, closing remarks, or extra explanation — just the tasks.
+`;
+
   const response = await Ainvidia(prompt);
 
   if (!response) {
     throw new apiError(408, "Cannot get the response from AI");
   }
 
-  // Send back the roadmap
+  // Convert plain text bullet points into an array
+  const taskArray = response
+    .split('\n')
+    .map(line => line.replace(/^[-•*\d.]+\s*/, '').trim()) // remove bullet symbols/numbers
+    .filter(task => task.length > 0); // remove empty lines
+
   return res.status(200).json(
     new apiResponse(200, {
-      message: "Career roadmap generated successfully",
-      roadmap: response,
+      name,
+      course,
+      year,
+      roadmap: taskArray,
     })
   );
 });
 
-export { Aihandle };
+export { Aihandle,taskArray };
