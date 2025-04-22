@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const OPENROUTER_API_KEY = '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'; // Replace with your OpenRouter API key
+ // Replace with your OpenRouter API key
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-
+const OPENROUTER_API_KEY = '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';
 
 const AiReq = async (prompt)=>{
     try {
@@ -73,7 +73,7 @@ const Ainvidia = async (prompt) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
+        model: "google/gemma-2-9b-it:free",
         messages: [
           {
             role: "user",
