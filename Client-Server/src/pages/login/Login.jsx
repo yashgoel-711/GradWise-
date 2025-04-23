@@ -1,39 +1,49 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router';
+import { Link , useNavigate } from 'react-router';
 import { Eye, EyeOff, LogIn, Mail, Lock } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux'
+import {login,logout} from '../../store/features/trackAuthSlice.js'
+
+import studentService from '../../services/student.service.js';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { isSubmitting, errors } 
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+      rememberMe: false
+    }
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     setError('');
     
-    if (!email || !password) {
-      setError('Please enter both email and password');
-      return;
-    }
-    
     try {
-      setIsLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await studentService.login(data);  
+      console.log("Server Response:", response.data.student);
+       if (response) {
+        localStorage.setItem("studentData", JSON.stringify(response.data.student)); 
+        dispatch(login(response.data.student)); 
+        navigate("/GradWise/dashboard");
+      }  
       
-      // For demo purposes - in a real app, this would be an actual API call
-      console.log('Login attempt with:', { email, password: '****', rememberMe });
-      
-      // Reset form or redirect would happen here after successful login
-      // window.location.href = '/dashboard';
-    } catch (err) {
-      setError('Invalid email or password. Please try again.');
-    } finally {
-      setIsLoading(false);
+    } catch (error) {
+      setError(error.response?.data?.message || "Something went wrong. Please try again.");
+
+      console.error("Error logging user:", error.response ? error.response.data : error.message);      
     }
+   
+    
   };
 
   return (
@@ -54,7 +64,7 @@ const Login = () => {
           </div>
         )}
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -66,16 +76,20 @@ const Login = () => {
                 </div>
                 <input
                   id="email"
-                  name="email"
                   type="email"
                   autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  className={`block w-full pl-10 pr-3 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-blue-500 focus:border-blue-500`}
                   placeholder="name@example.com"
+                  {...register('email', { 
+                    required: 'Email is required',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: 'Invalid email address'
+                    }
+                  })}
                 />
               </div>
+              {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
             </div>
             
             <div>
@@ -88,14 +102,13 @@ const Login = () => {
                 </div>
                 <input
                   id="password"
-                  name="password"
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  className={`block w-full pl-10 pr-10 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-blue-500 focus:border-blue-500`}
                   placeholder="••••••••"
+                  {...register('password', { 
+                    required: 'Password is required' 
+                  })}
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <button
@@ -111,20 +124,19 @@ const Login = () => {
                   </button>
                 </div>
               </div>
+              {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
             </div>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
-                id="remember-me"
-                name="remember-me"
+                id="rememberMe"
                 type="checkbox"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
                 className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                {...register('rememberMe')}
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+              <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-700">
                 Remember me
               </label>
             </div>
@@ -139,10 +151,10 @@ const Login = () => {
           <div>
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isSubmitting}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-colors duration-300"
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <span className="flex items-center">
                   <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

@@ -1,87 +1,58 @@
+import { useForm } from 'react-hook-form';
+import { Link , useNavigate} from 'react-router';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import studentService from '../../services/student.service.js'; // Make sure to import the service
+import { useDispatch } from 'react-redux'
+import {login,logout } from '../../store/features/trackAuthSlice.js'
+
 export default function RegistrationPage() {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    program: '',
-    graduationYear: '',
-    agreeToTerms: false
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { 
+    register, 
+    handleSubmit, 
+    watch, 
+    formState: { errors, isSubmitting } 
+  } = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+     
+      college: '',
+      branch: '',
+      year: '',
+      contact: '',
+      agreeToTerms: false
+    }
   });
   
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value
-    });
-    
-    // Clear error when field is edited
-    if (errors[name]) {
-      setErrors({
-        ...errors,
-        [name]: null
-      });
-    }
-  };
-  
-  const validate = () => {
-    const newErrors = {};
-    
-    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData.email)) {
-      newErrors.email = 'Invalid email address';
+  const onSubmit = async (data) => {
+    try {
+      const response = await studentService.createAccount(data);
+      if(response){
+        dispatch(login(response))
+        // navigate("/GradWise/dashboard")
+        setSubmitSuccess(true);
+        setSubmitError(null);
+      }
+      console.log("Server Response:", response.data);
+    } catch (error) {
+      console.error("Error registering user:", error.response ? error.response.data : error.message);
+      setSubmitError(error.message || 'Failed to create account. Please try again.');
     }
     
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
-    
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-    
-    if (!formData.program) newErrors.program = 'Please select a program';
-    if (!formData.graduationYear) newErrors.graduationYear = 'Please select your expected graduation year';
-    if (!formData.agreeToTerms) newErrors.agreeToTerms = 'You must agree to the terms and conditions';
-    
-    return newErrors;
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newErrors = validate();
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    setIsSubmitting(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Form submitted:', formData);
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-    }, 1500);
   };
   
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 10 }, (_, i) => currentYear + i);
+  
+  // Watch password for comparison with confirmPassword
+  const password = watch('password');
   
   if (submitSuccess) {
     return (
@@ -116,129 +87,131 @@ export default function RegistrationPage() {
           <p className="mt-2 text-gray-600">Create your account</p>
         </div>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        {submitError && (
+          <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-md border border-red-200">
+            {submitError}
+          </div>
+        )}
+        
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div >
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
               <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.firstName ? 'border-red-500' : 'border'}`}
+                id="name"
+                className={`mt-1 block w-full rounded-md border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+                {...register('name', { required: 'First name is required' })}
               />
-              {errors.firstName && <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>}
+              {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
             </div>
             
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.lastName ? 'border-red-500' : 'border'}`}
-              />
-              {errors.lastName && <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>}
-            </div>
+            
           </div>
           
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
-              type="email"
               id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.email ? 'border-red-500' : 'border'}`}
+              type="email"
+              className={`mt-1 block w-full rounded-md border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+              {...register('email', { 
+                required: 'Email is required',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: 'Invalid email address'
+                }
+              })}
             />
-            {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+            {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
           </div>
           
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input
-              type="password"
               id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.password ? 'border-red-500' : 'border'}`}
+              type="password"
+              className={`mt-1 block w-full rounded-md border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+              {...register('password', { 
+                required: 'Password is required',
+                minLength: {
+                  value: 8,
+                  message: 'Password must be at least 8 characters'
+                }
+              })}
             />
-            {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
+            {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
           </div>
           
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
             <input
-              type="password"
               id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.confirmPassword ? 'border-red-500' : 'border'}`}
+              type="password"
+              className={`mt-1 block w-full rounded-md border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
+              {...register('confirmPassword', { 
+                required: 'Please confirm your password',
+                validate: value => value === password || 'Passwords do not match'
+              })}
             />
-            {errors.confirmPassword && <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>}
+            {errors.confirmPassword && <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>}
           </div>
           
           <div>
-            <label htmlFor="program" className="block text-sm font-medium text-gray-700">Program</label>
-            <select
-              id="program"
-              name="program"
-              value={formData.program}
-              onChange={handleChange}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.program ? 'border-red-500' : 'border'}`}
-            >
-              <option value="">Select Program</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="Engineering">Engineering</option>
-              <option value="Business">Business</option>
-              <option value="Arts">Arts</option>
-              <option value="Science">Science</option>
-              <option value="Medicine">Medicine</option>
-              <option value="Law">Law</option>
-              <option value="Other">Other</option>
-            </select>
-            {errors.program && <p className="mt-1 text-sm text-red-600">{errors.program}</p>}
+            <label htmlFor="college" className="block text-sm font-medium text-gray-700">College</label>
+            <input
+              id="college"
+              className={`mt-1 block w-full rounded-md border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.college ? 'border-red-500' : 'border-gray-300'}`}
+              {...register('college')}
+            />
           </div>
           
           <div>
-            <label htmlFor="graduationYear" className="block text-sm font-medium text-gray-700">Expected Graduation Year</label>
+            <label htmlFor="branch" className="block text-sm font-medium text-gray-700">Branch</label>
+            <input
+              id="branch"
+              className={`mt-1 block w-full rounded-md border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.branch ? 'border-red-500' : 'border-gray-300'}`}
+              {...register('branch')}
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="contact" className="block text-sm font-medium text-gray-700">Contact</label>
+            <input
+              id="contact"
+              className={`mt-1 block w-full rounded-md border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.contact ? 'border-red-500' : 'border-gray-300'}`}
+              {...register('contact')}
+            />
+          </div>
+          
+         
+          
+          <div>
+            <label htmlFor="year" className="block text-sm font-medium text-gray-700">Expected Graduation Year</label>
             <select
-              id="graduationYear"
-              name="graduationYear"
-              value={formData.graduationYear}
-              onChange={handleChange}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.graduationYear ? 'border-red-500' : 'border'}`}
+              id="year"
+              className={`mt-1 block w-full rounded-md border shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${errors.year ? 'border-red-500' : 'border-gray-300'}`}
+              {...register('year', { required: 'Please select your expected graduation year' })}
             >
               <option value="">Select Year</option>
               {years.map(year => (
                 <option key={year} value={year}>{year}</option>
               ))}
             </select>
-            {errors.graduationYear && <p className="mt-1 text-sm text-red-600">{errors.graduationYear}</p>}
+            {errors.year && <p className="mt-1 text-sm text-red-600">{errors.year.message}</p>}
           </div>
           
           <div className="flex items-start">
             <div className="flex items-center h-5">
               <input
                 id="agreeToTerms"
-                name="agreeToTerms"
                 type="checkbox"
-                checked={formData.agreeToTerms}
-                onChange={handleChange}
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                {...register('agreeToTerms', { required: 'You must agree to the terms and conditions' })}
               />
             </div>
             <div className="ml-3 text-sm">
-              <label htmlFor="agreeToTerms" className="font-medium text-gray-700">
-                I agree to the <a href="#" className="text-indigo-600 hover:text-indigo-500">Terms</a> and <a href="#" className="text-indigo-600 hover:text-indigo-500">Privacy Policy</a>
-              </label>
-              {errors.agreeToTerms && <p className="text-red-600">{errors.agreeToTerms}</p>}
+              <label htmlFor="agreeToTerms" className="font-medium text-gray-700">I agree to the terms and conditions</label>
+              {errors.agreeToTerms && <p className="mt-1 text-sm text-red-600">{errors.agreeToTerms.message}</p>}
             </div>
           </div>
           

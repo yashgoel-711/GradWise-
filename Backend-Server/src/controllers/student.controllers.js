@@ -94,19 +94,21 @@ const options = {
 
 return res
   .status(200)
-  .cookie("Token", token, options)
+  .cookie("token", token, options)
   .json(
     new apiResponse(
       201,
       {
-        buyer: loggedInStudent,
-        Token: token,
+        student: loggedInStudent,
+        token: token,
       },
       "successfully logged In"
     )
   );
 })
+
 const logoutStudent = asyncAwaitHandler(async (req,res)=>{
+  
   const student = req.student
   if(!student){
     throw new apiError(400,"you must be logged IN")
@@ -118,7 +120,7 @@ const logoutStudent = asyncAwaitHandler(async (req,res)=>{
   };
     return res
       .status(200)
-      .clearCookie("Token", options)
+      .clearCookie("token", options)
       .json(new apiResponse(200, {}, "student Logged Out"));
 });
 
