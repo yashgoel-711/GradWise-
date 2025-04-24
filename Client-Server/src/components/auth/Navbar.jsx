@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import studentService from '../../services/student.service';
 import {useNavigate } from 'react-router'
+import { useSelector } from 'react-redux';
 
-const Navbar = (studentData) => {
+const Navbar = () => {
   
   const Navigate = useNavigate()
   const [isExpanded, setIsExpanded] = useState(true);
   const [isLoading , setIsLoading] = useState(false);
+  const studentData = useSelector((state) => state.trackAuth.studentData);
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
@@ -49,11 +51,11 @@ const Navbar = (studentData) => {
         <nav className="mt-6">
 
           <div className="px-4">
-            <NavItem icon="home" label="Dashboard" isExpanded={isExpanded} isActive={true} />
-            <NavItem icon="calendar" label="Schedule" isExpanded={isExpanded} />
-            <NavItem icon="book" label="Courses" isExpanded={isExpanded} />
-            <NavItem icon="chart" label="Progress" isExpanded={isExpanded} />
-            <NavItem icon="chat" label="Messages" isExpanded={isExpanded} />
+            <NavItem icon="home" label="Dashboard" isExpanded={isExpanded} isActive={true} onClick={()=>{Navigate("/GradWise/dashboard")}} />
+            <NavItem icon="calendar" label="Schedule" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/schedule")}} />
+            <NavItem icon="book" label="Courses" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/courses")}}/>
+            <NavItem icon="chart" label="Progress" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/progress")}} />
+            <NavItem icon="chat" label="Messages" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}/>
           </div>
           
           {/* Divider */}
@@ -77,8 +79,8 @@ const Navbar = (studentData) => {
             </div>
             {isExpanded && (
               <div className="ml-3">
-                <p className="font-medium">name</p>
-                <p className="text-sm text-gray-400">name</p>
+                <p className="font-medium">{studentData.name}</p>
+                <p className="text-sm text-gray-400">{studentData.name}</p>
               </div>
             )}
           </div>

@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router'
 import ProgressTracker from '../../components/auth/dashboard/ProgressTracker'
-import ResourceSuggestion from '../../components/auth/dashboard/ResourceSuggestion'
+
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -35,6 +35,7 @@ const Dashboard = () => {
       
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <WelcomeBanner />
         {/* Course Progress */}
         <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4">Course Progress</h2>
@@ -47,7 +48,6 @@ const Dashboard = () => {
           </div>
         </div>
         <ProgressTracker />
-        <ResourceSuggestion />
         {/* Recent Activity */}
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
