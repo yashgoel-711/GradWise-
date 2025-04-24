@@ -8,6 +8,7 @@ const AiProgressTracker = asyncAwaitHandler(async (req,res) => {
     throw new apiError(400,"Prompt is required")
 
   }
+  console.log(prompt)
   try {
     const aiResponse = await Ainvidia(prompt);
     console.log(aiResponse)

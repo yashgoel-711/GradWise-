@@ -1,41 +1,11 @@
 import axios from "axios";
 
- // Replace with your OpenRouter API key
+
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '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';
 
 
-// const Ainvidia = async (prompt) => {
-//   try {
-//     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-//       method: "POST",
-//       headers: {
-//         "Authorization": Bearer ${OPENROUTER_API_KEY},
-//         // "HTTP-Referer": "<YOUR_SITE_URL>", // Optional
-//         // "X-Title": "<YOUR_SITE_NAME>",     // Optional
-//         "Content-Type": "application/json"
-//       },
-//       body: JSON.stringify({
-//         model: "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
-//         messages: [
-//           {
-//             role: "user",
-//             content: prompt
-//           }
-//         ]
-//       })
-//     });
 
-//     const data = await response.json();
-
-//     console.log(typeof data); // should log "object"
-//     console.log(data.choices[0].message.content); // access the response content
-//     return data.choices[0].message.content;
-//   } catch (error) {
-//     console.error("Error fetching AI response:", error);
-//     return null;
-//   }
-// };
 const Ainvidia = async (prompt) => {
   try {
     // console.log(OPENROUTER_API_KEY)
