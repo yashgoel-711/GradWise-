@@ -43,4 +43,5 @@ Do not include any introduction, closing remarks, or extra explanation — just 
   );
 });
 
-export { Aihandle,taskArray };
+
+export { Aihandle };
