@@ -24,6 +24,7 @@ const Dashboard = () => {
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
       
+        <WelcomeBanner  className="w-full"/>
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard title="Active Courses" value={stats.courses} icon="books" color="blue" />
@@ -34,27 +35,31 @@ const Dashboard = () => {
       
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <WelcomeBanner />
-        {/* Course Progress */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">Course Progress</h2>
-          <div className="space-y-4">
-            <CourseProgress course="Data Structures" progress={75} />
-            <CourseProgress course="Advanced Research Methods" progress={60} />
-            <CourseProgress course="Software Engineering" progress={90} />
-            <CourseProgress course="Machine Learning Fundamentals" progress={30} />
-            <CourseProgress course="Academic Writing" progress={85} />
-          </div>
-        </div>
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-          <div className="space-y-4">
-            {recentActivities.map(activity => (
-              <ActivityItem key={activity.id} activity={activity} />
-            ))}
-          </div>
-        </div>
+
+        <div className="w-[77vw] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+  {/* Course Progress */}
+  <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
+    <h2 className="text-xl font-semibold mb-4">Course Progress</h2>
+    <div className="space-y-4">
+      <CourseProgress course="Data Structures" progress={75} />
+      <CourseProgress course="Advanced Research Methods" progress={60} />
+      <CourseProgress course="Software Engineering" progress={90} />
+      <CourseProgress course="Machine Learning Fundamentals" progress={30} />
+      <CourseProgress course="Academic Writing" progress={85} />
+    </div>
+  </div>
+
+  {/* Recent Activity */}
+  <div className="bg-white rounded-lg shadow p-6">
+    <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+    <div className="space-y-4">
+      {recentActivities.map(activity => (
+        <ActivityItem key={activity.id} activity={activity} />
+      ))}
+    </div>
+  </div>
+</div>
+        
       </div>
       
       {/* Upcoming Deadlines */}
