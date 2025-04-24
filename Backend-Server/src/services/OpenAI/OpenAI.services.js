@@ -2,7 +2,7 @@ import axios from "axios";
 
  // Replace with your OpenRouter API key
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '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';
 
 
 // const Ainvidia = async (prompt) => {
@@ -37,16 +37,17 @@ const OPENROUTER_API_KEY = 'sk-or-v1-41100ab88c9b0b7d288496cd524411c14ea56a88173
 //   }
 // };
 const Ainvidia = async (prompt) => {
+  console.log(prompt)
   try {
-    // console.log(OPENROUTER_API_KEY)
+    console.log(OPENROUTER_API_KEY)
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "Authorization": `Bearer ${OPENROUTER_API_KEY} `,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "google/gemma-2-9b-it:free",
+        model: "google/gemma-3-4b-it:free",
         messages: [
           {
             role: "user",
