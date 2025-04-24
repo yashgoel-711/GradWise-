@@ -2,8 +2,11 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router'
 import WelcomeBanner from '../../components/auth/dashboard/WelcomeBanner'
+import {NotificationBell} from '../../components/auth/dashboard/NotificationBell'
+import { useNavigate } from 'react-router'
 
 const Dashboard = () => {
+  const Navigate = useNavigate()
   const [stats, setStats] = useState({
     courses: 5,
     assignments: 12,
@@ -11,7 +14,11 @@ const Dashboard = () => {
     completionRate: 68
   })
   
-  const { studentData } = useOutletContext();
+  const notifications = [
+    { id: 1, message: "Your assignment was graded", time: "2 mins ago", read: false },
+    { id: 2, message: "New course added: AI Ethics", time: "1 hour ago", read: true },
+    { id: 3, message: "You’ve earned a badge for 7-day streak!", time: "Yesterday", read: false }
+  ];
   
   const [recentActivities, setRecentActivities] = useState([
     { id: 1, type: 'assignment', title: 'Research Paper Submission', course: 'Advanced Research Methods', date: '2025-04-18' },
@@ -22,8 +29,26 @@ const Dashboard = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+      <div className='flex justify-between'>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
-      
+      {/* <div className="bg-white rounded-lg shadow p-6 flex items-center space-x-4">
+    <img src="../../../public/Chatbot.png" alt="Chatbot" className="w-16 h-16" />
+  <div>
+    <h3 className="text-lg font-semibold">Need Help?</h3>
+    <p className="text-sm text-gray-600">I’m your friendly assistant!</p>
+  </div>
+</div> */}
+      <NotificationBell notifications = {notifications}/>
+      </div>
+      {/* chatbot */}
+      <img
+      onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
+    src="../../../public/Chatbot.png"
+    alt="Chatbot"
+    className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
+  />
+
+  
         <WelcomeBanner  className="w-full"/>
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

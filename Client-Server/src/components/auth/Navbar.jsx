@@ -56,6 +56,8 @@ const Navbar = () => {
             <NavItem icon="book" label="Courses" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/courses")}}/>
             <NavItem icon="chart" label="Progress" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/progress")}} />
             <NavItem icon="chat" label="Messages" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}/>
+            <NavItem icon="portfolio" label="PortFolio" isExpanded={isExpanded} />
+            <NavItem icon="opportunities" label="Opportunities" isExpanded={isExpanded} />
           </div>
           
           {/* Divider */}
@@ -94,6 +96,18 @@ const Navbar = () => {
 const NavItem = ({ icon, label, isExpanded, isActive = false, onClick }) => {
   const getIcon = (iconName) => {
     switch (iconName) {
+      case 'opportunities':
+      return (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7l-4-4-10 10zm0 0v4h4m6-10l3 3" />
+      </svg>
+  );
+      case 'portfolio':
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 12v.01M16 12v.01M8 12v.01M4 7h16M4 7a2 2 0 012-2h12a2 2 0 012 2m-16 0v10a2 2 0 002 2h12a2 2 0 002-2V7M9 3h6a1 1 0 011 1v3H8V4a1 1 0 011-1z" />
+        </svg>
+       );
       case 'home':
         return (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

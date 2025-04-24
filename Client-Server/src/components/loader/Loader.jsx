@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Loader = () => {
+export const Loader = () => {
   return (
     <StyledWrapper>
       <div className="banter-loader">
