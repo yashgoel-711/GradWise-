@@ -2,42 +2,15 @@ import axios from "axios";
 
  // Replace with your OpenRouter API key
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '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';
 
-const AiReq = async (prompt)=>{
-    try {
-        const response = await axios.post(
-          OPENROUTER_API_URL,
-          {
-            model: 'google/gemma-3-4b-it:free', 
 
-            messages: [
-              { role: 'user',
-                 content: prompt
-                }
-            ],
-          },
-          {
-            headers: {
-              'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-    
-        return response.data.choices[0].message.content;
-      } catch (error) {
-        console.error('Error:', error);
-        return null;
-      }
-
-}
 // const Ainvidia = async (prompt) => {
 //   try {
 //     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
 //       method: "POST",
 //       headers: {
-//         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+//         "Authorization": Bearer ${OPENROUTER_API_KEY},
 //         // "HTTP-Referer": "<YOUR_SITE_URL>", // Optional
 //         // "X-Title": "<YOUR_SITE_NAME>",     // Optional
 //         "Content-Type": "application/json"
@@ -104,4 +77,4 @@ const Ainvidia = async (prompt) => {
 };
 
 
-export {AiReq,Ainvidia}
+export {Ainvidia}

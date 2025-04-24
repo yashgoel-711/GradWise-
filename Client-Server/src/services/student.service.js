@@ -19,7 +19,8 @@ export class StudentService{
     async login(data){
         
         try {
-            const response = await axios.post("http://localhost:3000/student/login-Student", data ,{ withCredentials: true });                      
+            const response = await axios.post("http://localhost:3000/student/login-Student", data ,{ withCredentials: true }); 
+            console.log(response)                     
             return response;
         } catch (error) {
             console.error('backend service error student login failed :: ', error)
@@ -34,6 +35,16 @@ export class StudentService{
             }
         } catch (error) {
             console.error("backend service error student logout failed",error)
+        }
+    }
+    async AiData(data){
+        try {
+            const response = await axios.post("http://localhost:3000/ai/api/test/",data,{ withCredentials: true });
+            if(response){
+                return response;
+            }
+        } catch (error) {
+            console.error("backend service error student AiData failed",error)
         }
     }
 
