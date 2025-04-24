@@ -14,10 +14,11 @@ const ProgressTracker = () => {
     const fetchData = async () => {
       if (!studentInfo) return;
 
+
       try {
-        const response = await progressService.AiData(studentInfo);
+        const response = await progressService.AiDataRoadmap(studentInfo);
         const roadmap = response?.data?.data?.roadmap || [];
-        
+
 
         // Filter out unwanted values like "bullets"
         const filteredTasks = roadmap.filter((task) => task !== "bullets");
