@@ -1,7 +1,23 @@
 import React, { useState } from 'react';
+import studentService from '../../services/student.service';
+import {useNavigate } from 'react-router'
 
-const Navbar = () => {
+const Navbar = (studentData) => {
+  
+  const Navigate = useNavigate()
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isLoading , setIsLoading] = useState(false);
+
+  const handleSubmit = async(e)=>{
+    e.preventDefault();
+    setIsLoading(true);
+    const response = await studentService.logout();
+    if(response){
+      setIsLoading(false);
+      Navigate('/login')
+    }
+
+  }
 
   return (
     <>
@@ -31,6 +47,7 @@ const Navbar = () => {
 
         {/* Navigation Items */}
         <nav className="mt-6">
+
           <div className="px-4">
             <NavItem icon="home" label="Dashboard" isExpanded={isExpanded} isActive={true} />
             <NavItem icon="calendar" label="Schedule" isExpanded={isExpanded} />
@@ -41,11 +58,15 @@ const Navbar = () => {
           
           {/* Divider */}
           <div className="my-4 border-t border-gray-700"></div>
+
           
           <div className="px-4">
             <NavItem icon="settings" label="Settings" isExpanded={isExpanded} />
             <NavItem icon="help" label="Help" isExpanded={isExpanded} />
+            <NavItem icon="logout" label="logout" isExpanded={isExpanded} onClick={handleSubmit} />
+            
           </div>
+
         </nav>
         
         {/* User Profile */}
@@ -56,8 +77,8 @@ const Navbar = () => {
             </div>
             {isExpanded && (
               <div className="ml-3">
-                <p className="font-medium">John Doe</p>
-                <p className="text-sm text-gray-400">Student</p>
+                <p className="font-medium">name</p>
+                <p className="text-sm text-gray-400">name</p>
               </div>
             )}
           </div>
@@ -68,7 +89,7 @@ const Navbar = () => {
 };
 
 // Helper component for nav items
-const NavItem = ({ icon, label, isExpanded, isActive = false }) => {
+const NavItem = ({ icon, label, isExpanded, isActive = false, onClick }) => {
   const getIcon = (iconName) => {
     switch (iconName) {
       case 'home':
@@ -108,6 +129,12 @@ const NavItem = ({ icon, label, isExpanded, isActive = false }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         );
+        case 'logout':
+          return (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+            </svg>
+          );
       case 'help':
         return (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -120,7 +147,12 @@ const NavItem = ({ icon, label, isExpanded, isActive = false }) => {
   };
 
   return (
-    <div className={`mt-2 flex items-center py-3 px-3 rounded-lg cursor-pointer ${isActive ? 'bg-indigo-600' : 'hover:bg-gray-800'}`}>
+    <div
+      onClick={onClick}
+      className={`mt-2 flex items-center py-3 px-3 rounded-lg cursor-pointer ${
+        isActive ? 'bg-indigo-600' : 'hover:bg-gray-800'
+      }`}
+    >
       <div className="flex items-center justify-center">
         {getIcon(icon)}
       </div>

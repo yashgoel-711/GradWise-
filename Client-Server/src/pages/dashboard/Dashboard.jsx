@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import { useOutletContext } from 'react-router'
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -8,6 +9,8 @@ const Dashboard = () => {
     upcomingDeadlines: 3,
     completionRate: 68
   })
+  
+  const { studentData } = useOutletContext();
   
   const [recentActivities, setRecentActivities] = useState([
     { id: 1, type: 'assignment', title: 'Research Paper Submission', course: 'Advanced Research Methods', date: '2025-04-18' },

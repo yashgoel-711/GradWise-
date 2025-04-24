@@ -6,7 +6,7 @@ import {apiError} from '../utils/apiError.utils.js'
 
  const verifyStudentJWT = asyncAwaitHandler(async (req, _ ,next)=>{
     try {
-        const token = req.cookies?.Token || req.header("Authorization")?.replace("Bearer ","")
+        const token = req.cookies?.token || req.header("Authorization")?.replace("Bearer ","")
 
     if(!token){
         throw new apiError(400,"unauthorized request")
