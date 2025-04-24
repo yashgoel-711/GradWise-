@@ -30,10 +30,10 @@ const Login = () => {
     
     try {
       const response = await studentService.login(data);  
-      console.log("Server Response:", response.data.student);
+      console.log("Server Response:", response.data.data.student);
        if (response) {
-        localStorage.setItem("studentData", JSON.stringify(response.data.student)); 
-        dispatch(login(response.data.student)); 
+        localStorage.setItem("studentData", JSON.stringify(response.data.data.student)); 
+        dispatch(login(response.data.data.student)); 
         navigate("/GradWise/dashboard");
       }  
       
