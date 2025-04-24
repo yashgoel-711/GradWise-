@@ -20,6 +20,7 @@ const ResourceSuggestion = () => {
       const response = await suggestionService.AiData({ prompt });
 
       const result = response?.data || "No suggestions found.";
+      console.log(typeof result); // Check the type of result
       setSuggestions(result);
     } catch (err) {
       console.error("Error getting suggestions:", err);
@@ -51,12 +52,26 @@ const ResourceSuggestion = () => {
       </form>
 
       {error && <p className="text-red-500">{error}</p>}
-      {suggestions && (
-        <div className="bg-gray-100 p-4 rounded mt-4 whitespace-pre-wrap">
-          <h3 className="font-semibold mb-2">Suggestions:</h3>
-          <p>{suggestions}</p>
-        </div>
-      )}
+      {suggestions && typeof suggestions === "object" && (
+  <div className="bg-gray-100 p-4 rounded mt-4 whitespace-pre-wrap">
+    <h3 className="font-semibold mb-2">Suggestions:</h3>
+
+    {/* Render 'message' if exists */}
+    {suggestions.message && <p className="mb-2">{suggestions.message}</p>}
+
+    {/* Render 'data' if it's an array of suggestions or resources */}
+    {Array.isArray(suggestions.data) ? (
+      <ul className="list-disc list-inside space-y-1">
+        {suggestions.data.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    ) : (
+      suggestions.data && <p>{suggestions.data}</p>
+    )}
+  </div>
+)}
+
     </div>
   );
 };
