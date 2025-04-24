@@ -110,6 +110,12 @@ const Schedule = () => {
         >
           Add Task
         </button>
+        <img
+      onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
+    src="../../../public/Chatbot.png"
+    alt="Chatbot"
+    className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
+  />
       </div>
     );
   };

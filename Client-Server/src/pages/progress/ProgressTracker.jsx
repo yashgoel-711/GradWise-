@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { openAiService } from "../../services/openAi.services.js";
 import { useSelector } from "react-redux";
 import { Loader2 } from "lucide-react";
+import { Loader } from "../../components/loader/Loader.jsx";
 
 const progressService = new openAiService();
 
@@ -49,8 +50,9 @@ const ProgressTrackerPage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-[60vh]">
-        <Loader2 className="animate-spin w-6 h-6 text-gray-600" />
-        <span className="ml-2 text-gray-600">Loading roadmap...</span>
+        {/* <Loader2 className="animate-spin w-6 h-6 text-gray-600" />
+        <span className="ml-2 text-gray-600">Loading roadmap...</span> */}
+      <Loader />
       </div>
     );
   }
@@ -59,14 +61,27 @@ const ProgressTrackerPage = () => {
     return (
       <div className="text-center text-gray-500 mt-20">
         <p>No roadmap found for the current student.</p>
+        <img
+      onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
+    src="../../../public/Chatbot.png"
+    alt="Chatbot"
+    className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
+  />
       </div>
     );
   }
 
   return (
+    
     <div className="max-w-3xl mx-auto px-6 py-8">
       <div className="bg-white p-6 rounded-2xl shadow-md">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">📌 Career Progress Tracker</h2>
+        <img
+      onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
+    src="../../../public/Chatbot.png"
+    alt="Chatbot"
+    className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
+  />
         <ul className="space-y-3">
           {tasks.map((task, index) => (
             <li key={index} className="flex items-start gap-3">
