@@ -61,7 +61,7 @@ const Navbar = () => {
           </div>
           
           {/* Divider */}
-          <div className="my-4 border-t border-gray-700"></div>
+          <div className="my-4 mb-2 border-t border-gray-700"></div>
 
           
           <div className="px-4">
