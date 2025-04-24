@@ -1,32 +1,41 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Sparkles, Send } from "lucide-react";
-
 import { openAiService } from "../../services/openAi.services.js"; // Adjust path if needed
 
 const suggestionService = new openAiService();
+
 const OpenAIHelper = () => {
   const [input, setInput] = useState("");
-  const [response, setResponse] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-
+  
+    const userMessage = { role: "user", content: input };
+    setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
-    setResponse("");
-
+    setInput("");
+  
     try {
-      console.log(input)
-      const res = await suggestionService.AiData({input})
-      setResponse(res.data || "No response received.");
+      const res = await suggestionService.AiMessage({ prompt: input });
+  
+      // Extract just the actual AI message
+      const aiContent = res?.data?.data || "No response received.";
+  
+      const aiMessage = { role: "ai", content: aiContent };
+      setMessages((prev) => [...prev, aiMessage]);
     } catch (err) {
-      setResponse("Something went wrong. Please try again.");
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", content: "Something went wrong. Please try again." }
+      ]);
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="bg-white shadow rounded-2xl p-6 mb-6">
@@ -58,15 +67,23 @@ const OpenAIHelper = () => {
         </button>
       </form>
 
-      {loading ? (
-        <p className="text-sm text-gray-500 italic">Thinking...</p>
-      ) : (
-        response && (
-          <div className="p-3 bg-gray-100 border rounded-md text-gray-800 whitespace-pre-line">
-            {response}
+      <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`p-3 rounded-lg whitespace-pre-line text-sm ${
+              msg.role === "user"
+                ? "bg-purple-100 text-right ml-auto max-w-[80%]"
+                : "bg-gray-100 text-left mr-auto max-w-[80%]"
+            }`}
+          >
+            {msg.content}
           </div>
-        )
-      )}
+        ))}
+        {loading && (
+          <p className="text-sm text-gray-500 italic">Thinking...</p>
+        )}
+      </div>
     </div>
   );
 };

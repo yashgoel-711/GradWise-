@@ -4,6 +4,7 @@ import { asyncAwaitHandler } from "../utils/asyncAwaitHandler.utils.js";
 import { apiResponse } from "../utils/apiResponse.utils.js";
 const AiProgressTracker = asyncAwaitHandler(async (req,res) => {
   const prompt  = req.body.prompt
+  console.log("prompt from aiprogress tracker",prompt)
   if(!prompt){
     throw new apiError(400,"Prompt is required")
 
