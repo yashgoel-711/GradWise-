@@ -1,5 +1,6 @@
 import React from "react";
 import ResumeService from "../../services/portfolio.services.js";
+import ResumeService from "../../services/portfolio.services.js";
 
 const Portfolio = () => {
   const resumeService = new ResumeService();
@@ -8,7 +9,9 @@ const Portfolio = () => {
     const success = await resumeService.downloadResume();
     if (success) {
       alert("Resume Downloaded");
+      alert("Resume Downloaded");
     } else {
+      alert("Download Failed");
       alert("Download Failed");
     }
   };
@@ -22,19 +25,7 @@ const Portfolio = () => {
         This section contains my professional resume, a showcase of my work,
         projects, and a summary of my technical skills.
       </p>
-      <button
-        onClick={handleDownload}
-        style={{
-          backgroundColor: "#2563EB",
-          color: "white",
-          padding: "0.5rem 1rem",
-          borderRadius: "0.375rem",
-          cursor: "pointer",
-          border: "none",
-        }}
-      >
-        Download Resume
-      </button>
+      <button onClick={handleDownload}>Download Resume</button>
     </div>
   );
 };
