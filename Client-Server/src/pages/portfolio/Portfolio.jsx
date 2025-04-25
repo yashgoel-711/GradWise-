@@ -1,32 +1,42 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import ResumeService from "../../services/ResumeService";
-import { useToast } from "@/components/ui/use-toast";
+import ResumeService from "../../services/portfolio.services.js";
 
 const Portfolio = () => {
-  const { toast } = useToast();
   const resumeService = new ResumeService();
 
   const handleDownload = async () => {
     const success = await resumeService.downloadResume();
     if (success) {
-      toast({ title: "Resume Downloaded" });
+      alert("Resume Downloaded");
     } else {
-      toast({ title: "Download Failed", variant: "destructive" });
+      alert("Download Failed");
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-4">My Portfolio</h1>
-      <p className="text-lg mb-6">
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2.5rem 1rem" }}>
+      <h1 style={{ fontSize: "1.875rem", fontWeight: "bold", marginBottom: "1rem" }}>
+        My Portfolio
+      </h1>
+      <p style={{ fontSize: "1.125rem", marginBottom: "1.5rem" }}>
         This section contains my professional resume, a showcase of my work,
         projects, and a summary of my technical skills.
       </p>
-      <Button onClick={handleDownload}>Download Resume</Button>
+      <button
+        onClick={handleDownload}
+        style={{
+          backgroundColor: "#2563EB",
+          color: "white",
+          padding: "0.5rem 1rem",
+          borderRadius: "0.375rem",
+          cursor: "pointer",
+          border: "none",
+        }}
+      >
+        Download Resume
+      </button>
     </div>
   );
 };
 
 export default Portfolio;
-

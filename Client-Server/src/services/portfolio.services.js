@@ -1,25 +1,39 @@
 import axios from "axios";
 
-export class ResumeService {
+const BASE_URL = "http://localhost:3000/api/resume"; // Update this if your backend runs on a different URL
+
+class ResumeService {
   async downloadResume() {
     try {
-      const response = await axios.post("http://localhost:3000/api/resume", {
-        withCredentials: true,
-        responseType: "blob", // important for file download
-      });
+      // Get token from localStorage
+     
+      // Make request with Authorization header
+      const response = await axios.post(
+        `${BASE_URL}`,
+        {}, // Request body goes here, empty object if no data is being sent
+        {
+          withCredentials: true,
+          responseType: 'blob', // correct placement
+          headers: {
+            'Content-Type': 'application/json'
+          
+          },
+        }
+      );
 
-      // Create a URL from the response blob
+      // Handle file download
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "Resume.pdf"); // filename
+      link.setAttribute("download", "resume.pdf");
       document.body.appendChild(link);
+      console.log(link)
       link.click();
       link.remove();
 
       return true;
     } catch (error) {
-      console.error("Failed to download resume:", error);
+      console.error("Download failed:", error.response || error.message);
       return false;
     }
   }

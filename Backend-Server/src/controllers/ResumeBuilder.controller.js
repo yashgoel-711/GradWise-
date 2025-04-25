@@ -6,6 +6,7 @@ import { apiError } from "../utils/apiError.utils.js";
 
 export const generateResume = asyncAwaitHandler(async (req, res) => {
   const student = req.student;
+  console.log(student)
 
   if (!student) {
     throw new apiError(400, "Student data is required in request");
