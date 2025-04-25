@@ -25,8 +25,9 @@
     "dev": "nodemon --env-file=.env src/index.js"
   },
   "dependencies": {
-    "axios": "^1.8.4",
+    "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
+    "cheerio": "^1.0.0",
     "cloudinary": "^2.6.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
