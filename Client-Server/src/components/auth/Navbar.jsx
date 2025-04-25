@@ -56,7 +56,7 @@ const Navbar = () => {
             <NavItem icon="book" label="Courses" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/courses")}}/>
             <NavItem icon="chart" label="Progress" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/progress")}} />
             <NavItem icon="chat" label="Messages" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}/>
-            <NavItem icon="portfolio" label="PortFolio" isExpanded={isExpanded} />
+            <NavItem icon="portfolio" label="PortFolio" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/portfolio")}}/>
             <NavItem icon="opportunities" label="Opportunities" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/opportunities")}}/>
           </div>
           

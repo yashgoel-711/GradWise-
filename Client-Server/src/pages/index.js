@@ -8,6 +8,7 @@ import ProgressTracker from "./progress/ProgressTracker";
 import Courses from "./courses/Courses";
 import Schedule from "./schedule/Schedule";
 import Opportunities from "./opportunities/Opportunities";
+import Portfolio from "./portfolio/Portfolio";
 
 
-export {Home , About , Login , Register , Dashboard ,OpenAIHelper, ProgressTracker , Courses , Schedule , Opportunities}
+export {Home , About , Login , Register , Dashboard ,OpenAIHelper, ProgressTracker , Courses , Schedule , Opportunities , Portfolio}
