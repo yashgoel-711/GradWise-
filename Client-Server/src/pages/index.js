@@ -7,6 +7,7 @@ import Dashboard from "./dashboard/Dashboard";
 import ProgressTracker from "./progress/ProgressTracker";
 import Courses from "./courses/Courses";
 import Schedule from "./schedule/Schedule";
+import Opportunities from "./opportunities/Opportunities";
 
 
-export {Home , About , Login , Register , Dashboard ,OpenAIHelper, ProgressTracker , Courses , Schedule}
+export {Home , About , Login , Register , Dashboard ,OpenAIHelper, ProgressTracker , Courses , Schedule , Opportunities}
