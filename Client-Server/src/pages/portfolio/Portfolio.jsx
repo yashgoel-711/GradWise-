@@ -1,6 +1,5 @@
 import React from "react";
 import ResumeService from "../../services/portfolio.services.js";
-import ResumeService from "../../services/portfolio.services.js";
 
 const Portfolio = () => {
   const resumeService = new ResumeService();
