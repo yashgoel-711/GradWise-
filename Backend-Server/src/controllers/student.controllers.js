@@ -113,7 +113,7 @@ const logoutStudent = asyncAwaitHandler(async (req,res)=>{
   if(!student){
     throw new apiError(400,"you must be logged IN")
   }
-
+console.log('logout hitting');
   const options = {
     httpOnly: true,
     secure: true,
