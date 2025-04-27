@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Loader2 } from "lucide-react";
 import { Loader } from "../../components/loader/Loader.jsx";
 import { useNavigate } from 'react-router'
-
+import ChatBot from "../../components/chatbot/ChatBot.jsx"
 
 const progressService = new openAiService();
 
@@ -79,12 +79,7 @@ const ProgressTrackerPage = () => {
     <div className="max-w-3xl mx-auto px-6 py-8">
       <div className="bg-white p-6 rounded-2xl shadow-md">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">📌 Career Progress Tracker</h2>
-        <img
-      onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
-    src="../../../public/Chatbot.png"
-    alt="Chatbot"
-    className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
-  />
+       
         <ul className="space-y-3">
           {tasks.map((task, index) => (
             <li key={index} className="flex items-start gap-3">
@@ -101,6 +96,7 @@ const ProgressTrackerPage = () => {
           ))}
         </ul>
       </div>
+      <ChatBot />
     </div>
   );
 };

@@ -3,6 +3,8 @@ import { openAiService } from "../../services/openAi.services.js"; // Adjust pat
 import ReactMarkdown from "react-markdown";
 const suggestionService = new openAiService();
 import { useNavigate } from "react-router";
+import ChatBot from "../../components/chatbot/ChatBot.jsx"
+
 
 const Courses = () => {
   const Navigate = useNavigate();
@@ -46,12 +48,7 @@ const Courses = () => {
           className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
-        <img
-          src="../../../public/Chatbot.png"
-          onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
-          alt="Chatbot"
-          className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
-        />
+       
         <button
           type="submit"
           disabled={loading}
@@ -69,6 +66,9 @@ const Courses = () => {
           <ReactMarkdown>{suggestions}</ReactMarkdown> {/* ✅ Render formatted markdown! */}
         </div>
       )}
+
+      <ChatBot />
+      
     </div>
   );
 };

@@ -16,6 +16,7 @@ import { addNotification } from "../../store/features/notificationSlice.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router'
+import ChatBot from "../../components/chatbot/ChatBot"
 
 
 const Schedule = () => {
@@ -240,14 +241,7 @@ const Schedule = () => {
             Add Task
           </button>
         </div>
-        <img
-          onClick={() => {
-            Navigate("/GradWise/OpenAI-Help");
-          }}
-          src="../../../public/Chatbot.png"
-          alt="Chatbot"
-          className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
-        />
+        <ChatBot />
       </div>
     );
   };

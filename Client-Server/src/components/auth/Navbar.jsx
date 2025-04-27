@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import studentService from '../../services/student.service';
-import {useNavigate } from 'react-router'
+import { useNavigate, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 
 const Navbar = () => {
-  
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
+  const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(true);
-  const [isLoading , setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const studentData = useSelector((state) => state.trackAuth.studentData);
+  const [activeRoute, setActiveRoute] = useState('');
 
-  const handleSubmit = async(e)=>{
+  // Set active route based on current location
+  useEffect(() => {
+    const path = location.pathname;
+    const route = path.split('/').pop();
+    setActiveRoute(route);
+  }, [location]);
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
     setIsLoading(true);
     const response = await studentService.logout();
@@ -18,12 +26,26 @@ const Navbar = () => {
       setIsLoading(false);
       Navigate('/login')
     }
+  }
 
+  // Helper function to check if route is active
+  const isRouteActive = (route) => {
+    if (route === 'dashboard' && activeRoute === 'dashboard') return true;
+    if (route === 'schedule' && activeRoute === 'schedule') return true;
+    if (route === 'courses' && activeRoute === 'courses') return true;
+    if (route === 'progress' && activeRoute === 'progress') return true;
+    if (route === 'OpenAI-Help' && activeRoute === 'OpenAI-Help') return true;
+    if (route === 'portfolio' && activeRoute === 'portfolio') return true;
+    if (route === 'opportunities' && activeRoute === 'opportunities') return true;
+    if (route === 'community' && activeRoute === 'community') return true;
+    if (route === 'settings' && activeRoute === 'settings') return true;
+    if (route === 'help' && activeRoute === 'help') return true;
+    return false;
   }
 
   return (
     <>
-      <div className={`${isExpanded ? 'w-64' : 'w-20'} h-screen bg-gray-900 text-white transition-all duration-300 fixed left-0 top-0 z-10`}>
+      <div className={`${isExpanded ? 'w-64' : 'w-20'} h-screen bg-gray-900 text-white transition-all duration-300 fixed left-0 top-0 z-10 flex flex-col`}>
         {/* Logo and Toggle Button */}
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           {isExpanded ? (
@@ -47,42 +69,106 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="mt-6">
-
+        {/* Navigation Items - Added overflow-y-auto for scrolling */}
+        <nav className="mt-6 flex-1 overflow-y-auto">
           <div className="px-4">
-            <NavItem icon="home" label="Dashboard" isExpanded={isExpanded} isActive={true} onClick={()=>{Navigate("/GradWise/dashboard")}} />
-            <NavItem icon="calendar" label="Schedule" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/schedule")}} />
-            <NavItem icon="book" label="Courses" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/courses")}}/>
-            <NavItem icon="chart" label="Progress" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/progress")}} />
-            <NavItem icon="chat" label="Messages" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}/>
-            <NavItem icon="portfolio" label="PortFolio" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/portfolio")}}/>
-            <NavItem icon="opportunities" label="Opportunities" isExpanded={isExpanded} onClick={()=>{Navigate("/GradWise/opportunities")}}/>
+            <NavItem 
+              icon="home" 
+              label="Dashboard" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('dashboard')} 
+              onClick={()=>{Navigate("/GradWise/dashboard")}} 
+            />
+            <NavItem 
+              icon="calendar" 
+              label="Schedule" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('schedule')} 
+              onClick={()=>{Navigate("/GradWise/schedule")}} 
+            />
+            <NavItem 
+              icon="book" 
+              label="Courses" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('courses')} 
+              onClick={()=>{Navigate("/GradWise/courses")}}
+            />
+            <NavItem 
+              icon="chart" 
+              label="Progress" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('progress')} 
+              onClick={()=>{Navigate("/GradWise/progress")}} 
+            />
+            <NavItem 
+              icon="chat" 
+              label="Messages" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('OpenAI-Help')} 
+              onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
+            />
+            <NavItem 
+              icon="portfolio" 
+              label="PortFolio" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('portfolio')} 
+              onClick={()=>{Navigate("/GradWise/portfolio")}}
+            />
+            <NavItem 
+              icon="opportunities" 
+              label="Opportunities" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('opportunities')} 
+              onClick={()=>{Navigate("/GradWise/opportunities")}}
+            />
+            <NavItem 
+              icon="community" 
+              label="Community" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('community')} 
+              onClick={()=>{Navigate("/GradWise/community")}}
+            />
           </div>
           
           {/* Divider */}
           <div className="my-4 mb-2 border-t border-gray-700"></div>
 
-          
           <div className="px-4">
-            <NavItem icon="settings" label="Settings" isExpanded={isExpanded} />
-            <NavItem icon="help" label="Help" isExpanded={isExpanded} />
-            <NavItem icon="logout" label="logout" isExpanded={isExpanded} onClick={handleSubmit} />
-            
+            <NavItem 
+              icon="settings" 
+              label="Settings" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('settings')}
+              // onClick={()=>{Navigate("/GradWise/settings")}} 
+            />
+            <NavItem 
+              icon="help" 
+              label="Help" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('help')}
+              // onClick={()=>{Navigate("/GradWise/help")}} 
+            />
+            <NavItem 
+              icon="logout" 
+              label="logout" 
+              isExpanded={isExpanded} 
+              onClick={handleSubmit} 
+            />
           </div>
-
         </nav>
         
-        {/* User Profile */}
-        <div className="absolute bottom-0 w-full border-t border-gray-700">
+        {/* User Profile - Moved outside the scrollable area */}
+        <div className="border-t border-gray-700 mt-auto">
           <div className="flex items-center p-4">
             <div className="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center">
-              <span className="font-medium text-white">JD</span>
+              <span className="font-medium text-white">
+                {studentData.name ? studentData.name.charAt(0) : "U"}
+              </span>
             </div>
             {isExpanded && (
               <div className="ml-3">
                 <p className="font-medium">{studentData.name}</p>
-                <p className="text-sm text-gray-400">{studentData.name}</p>
+                <p className="text-sm text-gray-400">{studentData.email || studentData.name}</p>
               </div>
             )}
           </div>
@@ -97,18 +183,30 @@ const NavItem = ({ icon, label, isExpanded, isActive = false, onClick }) => {
   const getIcon = (iconName) => {
     switch (iconName) {
       case 'opportunities':
-      return (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7l-4-4-10 10zm0 0v4h4m6-10l3 3" />
-      </svg>
-  );     
-     
-      case 'portfolio':
-      return (
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7l-4-4-10 10zm0 0v4h4m6-10l3 3" />
+          </svg>
+        );     
+      
+      case 'community': return (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 12v.01M16 12v.01M8 12v.01M4 7h16M4 7a2 2 0 012-2h12a2 2 0 012 2m-16 0v10a2 2 0 002 2h12a2 2 0 002-2V7M9 3h6a1 1 0 011 1v3H8V4a1 1 0 011-1z" />
+          <circle cx="8" cy="6" r="2" />
+          <circle cx="16" cy="6" r="2" />
+          <circle cx="12" cy="16" r="2" />
+          <path d="M8 8v2" />
+          <path d="M16 8v2" />
+          <path d="M8 10c0 1.5 1.5 4 4 4" />
+          <path d="M16 10c0 1.5-1.5 4-4 4" />
         </svg>
-       );
+      );
+      
+      case 'portfolio':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 12v.01M16 12v.01M8 12v.01M4 7h16M4 7a2 2 0 012-2h12a2 2 0 012 2m-16 0v10a2 2 0 002 2h12a2 2 0 002-2V7M9 3h6a1 1 0 011 1v3H8V4a1 1 0 011-1z" />
+          </svg>
+        );
       case 'home':
         return (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,12 +244,12 @@ const NavItem = ({ icon, label, isExpanded, isActive = false, onClick }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         );
-        case 'logout':
-          return (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
-            </svg>
-          );
+      case 'logout':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+          </svg>
+        );
       case 'help':
         return (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
