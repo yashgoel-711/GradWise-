@@ -1,8 +1,10 @@
 import React from 'react';
 import Hackathons from '../../components/auth/opportunities/Hackathons';
 import Internships from '../../components/auth/opportunities/Internships';
+import { useNavigate } from 'react-router'
 
 const Opportunities = () => {
+  const Navigate = useNavigate()
   return (
     <div className="px-6 py-8 bg-gray-50 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center">Explore Opportunities</h1>

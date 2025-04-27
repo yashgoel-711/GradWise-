@@ -40,6 +40,7 @@ const Dashboard = () => {
 </div> */}
       <NotificationBell notifications = {notifications}/>
       </div>
+      
       {/* chatbot */}
       <img
       onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}

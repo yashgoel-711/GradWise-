@@ -11,8 +11,10 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
+import { useNavigate } from 'react-router'
 
 const Schedule = () => {
+  const Navigate = useNavigate()
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState({});
@@ -207,7 +209,7 @@ const Schedule = () => {
           }}
           src="../../../public/Chatbot.png"
           alt="Chatbot"
-          className="fixed bottom-6 right-6 w-16 h-16 cursor-pointer hover:scale-105 transition-transform z-50"
+          className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
         />
       </div>
     );

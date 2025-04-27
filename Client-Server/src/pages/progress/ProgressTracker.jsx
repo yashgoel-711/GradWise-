@@ -3,10 +3,13 @@ import { openAiService } from "../../services/openAi.services.js";
 import { useSelector } from "react-redux";
 import { Loader2 } from "lucide-react";
 import { Loader } from "../../components/loader/Loader.jsx";
+import { useNavigate } from 'react-router'
+
 
 const progressService = new openAiService();
 
 const ProgressTrackerPage = () => {
+  const Navigate = useNavigate()
   const studentInfo = useSelector((state) => state.trackAuth.studentData);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
