@@ -45,7 +45,7 @@ const Dashboard = () => {
     return notif.message.includes(todayString);
   });
   console.log("today notification ",todayNotifications)
-  const allNotifications = [...notifications, ...todayNotifications];
+  const allNotifications = [...notifications, ...todayNotifications].reverse();
   console.log(allNotifications)
 
 
