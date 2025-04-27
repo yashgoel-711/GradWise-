@@ -15,7 +15,6 @@
     "axios": "^1.8.4",
     "class-variance-authority": "^0.7.1",
     "date-fns": "^4.1.0",
-    
     "lucide-react": "^0.501.0",
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
