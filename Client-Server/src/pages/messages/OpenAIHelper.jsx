@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Sparkles, Send } from "lucide-react";
 import { openAiService } from "../../services/openAi.services.js"; // Adjust path if needed
-
+import ReactMarkdown from "react-markdown";
 const suggestionService = new openAiService();
 
 const OpenAIHelper = () => {
@@ -77,7 +77,8 @@ const OpenAIHelper = () => {
                 : "bg-gray-100 text-left mr-auto max-w-[80%]"
             }`}
           >
-            {msg.content}
+             <ReactMarkdown>{msg.content}</ReactMarkdown>
+            
           </div>
         ))}
         {loading && (
