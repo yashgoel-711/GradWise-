@@ -1,6 +1,6 @@
 import React from "react";
 import ResumeService from "../../services/portfolio.services.js";
-
+import ChatBot from "../../components/chatbot/ChatBot.jsx"
 import { useNavigate } from 'react-router'
 const Portfolio = () => {
   const resumeService = new ResumeService();
@@ -33,12 +33,7 @@ const Portfolio = () => {
       </p>
       <button onClick={handleDownload}>Download Resume</button>
       {/* chatbot */}
-      <img
-         onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
-         src="../../../public/Chatbot.png"
-         alt="Chatbot"
-         className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
-        />
+      <ChatBot />
     </div>
   );
 };

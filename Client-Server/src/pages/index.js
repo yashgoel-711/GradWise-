@@ -9,6 +9,6 @@ import Courses from "./courses/Courses";
 import Schedule from "./schedule/Schedule";
 import Opportunities from "./opportunities/Opportunities";
 import Portfolio from "./portfolio/Portfolio";
+import Community from "./community/Community";
 
-
-export {Home , About , Login , Register , Dashboard ,OpenAIHelper, ProgressTracker , Courses , Schedule , Opportunities , Portfolio}
+export {Home , About , Login , Register , Dashboard ,OpenAIHelper, ProgressTracker , Courses , Schedule , Opportunities , Portfolio , Community}

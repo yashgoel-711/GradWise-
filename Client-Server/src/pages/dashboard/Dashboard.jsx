@@ -5,6 +5,8 @@ import WelcomeBanner from '../../components/auth/dashboard/WelcomeBanner'
 import {NotificationBell} from '../../components/auth/dashboard/NotificationBell'
 import { useNavigate } from 'react-router'
 import { useDispatch, useSelector } from "react-redux";
+import ChatBot from '../../components/chatbot/ChatBot'
+
 const Dashboard = () => {
   const dispatch = useDispatch();
   const notificationslol = useSelector((state) => state.notification.notifications);
@@ -43,7 +45,7 @@ const Dashboard = () => {
     return notif.message.includes(todayString);
   });
   console.log("today notification ",todayNotifications)
-  const allNotifications = [...notifications, ...todayNotifications];
+  const allNotifications = [...notifications, ...todayNotifications].reverse();
   console.log(allNotifications)
 
 
@@ -71,12 +73,13 @@ const Dashboard = () => {
       </div>
       
       {/* chatbot */}
-      <img
+      <ChatBot />
+      {/* <img
       onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
     src="../../../public/Chatbot.png"
     alt="Chatbot"
     className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
-  />
+  /> */}
 
   
         <WelcomeBanner  className="w-full"/>
