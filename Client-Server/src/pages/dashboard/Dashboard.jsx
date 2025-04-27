@@ -4,8 +4,28 @@ import { useOutletContext } from 'react-router'
 import WelcomeBanner from '../../components/auth/dashboard/WelcomeBanner'
 import {NotificationBell} from '../../components/auth/dashboard/NotificationBell'
 import { useNavigate } from 'react-router'
-
+import { useDispatch, useSelector } from "react-redux";
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const notificationslol = useSelector((state) => state.notification.notifications);
+  const today = new Date();
+  function getTodayWithSuffix() {
+    const date = new Date();
+    const day = date.getDate();
+  
+    // Add suffix (st, nd, rd, th)
+    let suffix = "th";
+    if (day === 1 || day === 21 || day === 31) suffix = "st";
+    else if (day === 2 || day === 22) suffix = "nd";
+    else if (day === 3 || day === 23) suffix = "rd";
+  
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+  
+    return `${month} ${day}${suffix}, ${year}`;
+  }
+  const todayString = getTodayWithSuffix()
+  console.log(notificationslol)
   const Navigate = useNavigate()
   const [stats, setStats] = useState({
     courses: 5,
@@ -13,12 +33,21 @@ const Dashboard = () => {
     upcomingDeadlines: 3,
     completionRate: 68
   })
-  
+ 
   const notifications = [
     { id: 1, message: "Your assignment was graded", time: "2 mins ago", read: false },
     { id: 2, message: "New course added: AI Ethics", time: "1 hour ago", read: true },
     { id: 3, message: "You’ve earned a badge for 7-day streak!", time: "Yesterday", read: false }
   ];
+  const todayNotifications = notificationslol.filter((notif) => {
+    return notif.message.includes(todayString);
+  });
+  console.log("today notification ",todayNotifications)
+  const allNotifications = [...notifications, ...todayNotifications];
+  console.log(allNotifications)
+
+
+  
   
   const [recentActivities, setRecentActivities] = useState([
     { id: 1, type: 'assignment', title: 'Research Paper Submission', course: 'Advanced Research Methods', date: '2025-04-18' },
@@ -38,7 +67,7 @@ const Dashboard = () => {
     <p className="text-sm text-gray-600">I’m your friendly assistant!</p>
   </div>
 </div> */}
-      <NotificationBell notifications = {notifications}/>
+      <NotificationBell notifications = {allNotifications}/>
       </div>
       {/* chatbot */}
       <img

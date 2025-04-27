@@ -1,18 +1,25 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   format,
+  addDays,
+  isSameMonth,
+  isSameDay,
   startOfMonth,
   endOfMonth,
   startOfWeek,
   endOfWeek,
-  addDays,
-  isSameMonth,
-  isSameDay,
   addMonths,
   subMonths,
 } from "date-fns";
+import { addNotification } from "../../store/features/notificationSlice.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Schedule = () => {
+  const dispatch = useDispatch();
+  const notifications = useSelector((state) => state.notification.notifications);
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState({});
@@ -27,6 +34,16 @@ const Schedule = () => {
   const handleAddEvent = () => {
     if (!newEvent.trim()) return;
     const dateKey = format(selectedDate, "yyyy-MM-dd");
+
+    const message = `Task "${newEvent}" added to ${format(selectedDate, "PPP")}`;
+    toast.success(message);
+    dispatch(
+      addNotification({
+        id: new Date().getTime(),
+        message,
+      })
+    );
+
     setEvents((prev) => ({
       ...prev,
       [dateKey]: [...(prev[dateKey] || []), newEvent.trim()],
@@ -37,11 +54,24 @@ const Schedule = () => {
   const handleDeleteEvent = (index) => {
     const dateKey = format(selectedDate, "yyyy-MM-dd");
     const updatedEvents = [...(events[dateKey] || [])];
+    const eventToDelete = updatedEvents[index];
+
     updatedEvents.splice(index, 1);
+
+    const message = `Task "${eventToDelete}" deleted from ${format(selectedDate, "PPP")}`;
+    toast.error(message);
+    dispatch(
+      addNotification({
+        id: new Date().getTime(),
+        message,
+      })
+    );
+
     setEvents((prev) => ({
       ...prev,
       [dateKey]: updatedEvents,
     }));
+
     if (editingIndex === index) {
       setEditingIndex(null);
       setEditedText("");
@@ -60,6 +90,16 @@ const Schedule = () => {
     const dateKey = format(selectedDate, "yyyy-MM-dd");
     const updatedEvents = [...(events[dateKey] || [])];
     updatedEvents[editingIndex] = editedText.trim();
+
+    const message = `Task updated to "${editedText}" on ${format(selectedDate, "PPP")}`;
+    toast.info(message);
+    dispatch(
+      addNotification({
+        id: new Date().getTime(),
+        message,
+      })
+    );
+
     setEvents((prev) => ({
       ...prev,
       [dateKey]: updatedEvents,
@@ -113,8 +153,8 @@ const Schedule = () => {
             key={day}
             onClick={() => handleDateClick(cloneDay)}
             className={`p-2 text-center rounded-lg cursor-pointer border transition-all duration-200 ease-in-out min-h-[80px]
-              ${!isSameMonth(day, monthStart) ? "text-gray-400" : ""}
-              ${isToday ? "bg-blue-100" : ""}
+              ${!isSameMonth(day, monthStart) ? "text-gray-400" : ""} 
+              ${isToday ? "bg-blue-100" : ""} 
               ${isSelected ? "bg-indigo-300 text-white" : "hover:bg-indigo-100"}`}
           >
             <div>{formattedDate}</div>
@@ -144,10 +184,7 @@ const Schedule = () => {
         <h3 className="font-bold mb-2">Tasks for {format(selectedDate, "PPP")}:</h3>
         <div className="mb-4 max-h-60 overflow-y-auto space-y-2 pr-1">
           {(events[dateKey] || []).map((event, idx) => (
-            <div
-              key={idx}
-              className="bg-gray-100 p-2 rounded text-sm break-words"
-            >
+            <div key={idx} className="bg-gray-100 p-2 rounded text-sm break-words">
               {editingIndex === idx ? (
                 <div className="w-full">
                   <input
@@ -201,14 +238,6 @@ const Schedule = () => {
             Add Task
           </button>
         </div>
-        <img
-          onClick={() => {
-            Navigate("/GradWise/OpenAI-Help");
-          }}
-          src="../../../public/Chatbot.png"
-          alt="Chatbot"
-          className="fixed bottom-6 right-6 w-16 h-16 cursor-pointer hover:scale-105 transition-transform z-50"
-        />
       </div>
     );
   };
@@ -221,6 +250,7 @@ const Schedule = () => {
         {renderCells()}
       </div>
       {renderSidebar()}
+      <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
 };
