@@ -7,10 +7,13 @@ const Portfolio = () => {
 
   const Navigate = useNavigate()
   const handleDownload = async () => {
-    const success = await resumeService.downloadResume();
-    if (success) {
-      alert("Resume Downloaded");
-      alert("Resume Downloaded");
+   
+    const downloadUrl = await resumeService.getDownloadLink();
+    if (downloadUrl) {
+      // alert("Resume Downloaded");
+      // alert("Resume Downloaded");
+      window.open(downloadUrl, "_blank");
+      
     } else {
       alert("Download Failed");
       alert("Download Failed");
