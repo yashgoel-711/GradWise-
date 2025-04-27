@@ -1,6 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { BookOpen, Compass, Award, BarChart2, Calendar, Check, Star, Brain } from 'lucide-react';
+import {useNavigate} from "react-router"
 
 const progressData = [
   { name: 'Sem 1', gpa: 7.2, skills: 30 },
@@ -71,6 +72,7 @@ const FAQs = [
 ];
 
 const Home = () => {
+  const Navigate = useNavigate();
   return (
     <div className="bg-gradient-to-b from-white to-blue-50">
       {/* Hero Section */}
@@ -85,7 +87,7 @@ const Home = () => {
               AI-powered progress tracking and personalized guidance to help you excel in your BTech degree and prepare for your dream career.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300">
+              <button onClick={()=>{Navigate("/register")}} className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300">
                 Get Started — It's Free
               </button>
               <button className="border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-3 px-6 rounded-lg transition-colors duration-300">
@@ -269,7 +271,7 @@ const Home = () => {
             Join thousands of students who have improved their academic performance and career readiness with GradWise.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-blue-600 hover:bg-gray-100 font-medium py-3 px-8 rounded-lg transition-colors duration-300 text-lg">
+            <button onClick={()=>{Navigate("/register")}} className="bg-white text-blue-600 hover:bg-gray-100 font-medium py-3 px-8 rounded-lg transition-colors duration-300 text-lg">
               Get Started For Free
             </button>
             <button className="border border-white text-white hover:bg-blue-700 font-medium py-3 px-8 rounded-lg transition-colors duration-300 text-lg">
@@ -279,7 +281,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
+      
       
     </div>
   );
