@@ -37,9 +37,9 @@ const OPENROUTER_API_KEY = 'sk-or-v1-58e4f0291f5d684eb238068b6b7f4e4592e3c7ec9ba
 //   }
 // };
 const Ainvidia = async (prompt) => {
-  console.log(prompt)
+  // console.log(prompt)
   try {
-    console.log(OPENROUTER_API_KEY)
+    // console.log(OPENROUTER_API_KEY)
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -58,7 +58,7 @@ const Ainvidia = async (prompt) => {
     });
 
     const data = await response.json();
-    // console.log("Full API response:", data);
+    console.log("Full API response:", data);
 
     if (!data?.choices?.[0]?.message?.content) {
       throw new Error("Invalid response structure from OpenRouter AI");
@@ -66,7 +66,8 @@ const Ainvidia = async (prompt) => {
 
     return data.choices[0].message.content;
 
-  } catch (error) {
+  }
+   catch (error) {
     console.error("Error fetching AI response:", error.message);
     throw {
       statusCode: 408,
