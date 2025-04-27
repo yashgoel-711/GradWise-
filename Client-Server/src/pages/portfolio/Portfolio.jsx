@@ -1,9 +1,11 @@
 import React from "react";
 import ResumeService from "../../services/portfolio.services.js";
 
+import { useNavigate } from 'react-router'
 const Portfolio = () => {
   const resumeService = new ResumeService();
 
+  const Navigate = useNavigate()
   const handleDownload = async () => {
    
     const downloadUrl = await resumeService.getDownloadLink();
@@ -19,15 +21,24 @@ const Portfolio = () => {
   };
 
   return (
+    
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2.5rem 1rem" }}>
       <h1 style={{ fontSize: "1.875rem", fontWeight: "bold", marginBottom: "1rem" }}>
         My Portfolio
       </h1>
+      
       <p style={{ fontSize: "1.125rem", marginBottom: "1.5rem" }}>
         This section contains my professional resume, a showcase of my work,
         projects, and a summary of my technical skills.
       </p>
       <button onClick={handleDownload}>Download Resume</button>
+      {/* chatbot */}
+      <img
+         onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
+         src="../../../public/Chatbot.png"
+         alt="Chatbot"
+         className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
+        />
     </div>
   );
 };

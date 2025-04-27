@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { openAiService } from "../../services/openAi.services.js"; // Adjust path if needed
 import ReactMarkdown from "react-markdown";
 const suggestionService = new openAiService();
+import { useNavigate } from "react-router";
 
 const Courses = () => {
+  const Navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState(""); // store string
   const [loading, setLoading] = useState(false);
@@ -46,6 +48,7 @@ const Courses = () => {
         />
         <img
           src="../../../public/Chatbot.png"
+          onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
           alt="Chatbot"
           className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
         />

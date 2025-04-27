@@ -15,11 +15,13 @@ import {
 import { addNotification } from "../../store/features/notificationSlice.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router'
+
 
 const Schedule = () => {
   const dispatch = useDispatch();
   const notifications = useSelector((state) => state.notification.notifications);
-
+  const Navigate = useNavigate()
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState({});
@@ -238,6 +240,14 @@ const Schedule = () => {
             Add Task
           </button>
         </div>
+        <img
+          onClick={() => {
+            Navigate("/GradWise/OpenAI-Help");
+          }}
+          src="../../../public/Chatbot.png"
+          alt="Chatbot"
+          className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
+        />
       </div>
     );
   };
