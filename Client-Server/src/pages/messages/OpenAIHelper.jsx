@@ -7,7 +7,7 @@ const suggestionService = new openAiService();
 const OpenAIHelper = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
