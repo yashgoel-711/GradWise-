@@ -6,8 +6,10 @@ export class StudentService{
     
     async createAccount(data){
         try {
+            console.log(import.meta)
+            
             // console.log(data);  
-            const response = await axios.post("http://localhost:3000/student/register-Student", data );  
+            const response = await axios.post(`${process.env.BACKEND_URL}/student/register-Student`, data );  
             console.log(response)
             await this.login(data)
             return response;
@@ -19,7 +21,7 @@ export class StudentService{
     async login(data){
         
         try {
-            const response = await axios.post("http://localhost:3000/student/login-Student", data ,{ withCredentials: true }); 
+            const response = await axios.post(`${process.env.BACKEND_URL}/student/login-Student`, data ,{ withCredentials: true }); 
             console.log(response)                     
             return response;
         } catch (error) {
@@ -29,7 +31,7 @@ export class StudentService{
 
     async logout(){
         try {
-            const response = await axios.post("http://localhost:3000/student/logout-Student",{},{ withCredentials: true });
+            const response = await axios.post(`${process.env.BACKEND_URL}/student/logout-Student`,{},{ withCredentials: true });
             if(response){
                 return response;
             }
@@ -39,7 +41,7 @@ export class StudentService{
     }
     async AiData(data){
         try {
-            const response = await axios.post("http://localhost:3000/ai/api/test/",data,{ withCredentials: true });
+            const response = await axios.post(`${process.env.BACKEND_URL}/ai/api/test/`,data,{ withCredentials: true });
             if(response){
                 return response;
             }

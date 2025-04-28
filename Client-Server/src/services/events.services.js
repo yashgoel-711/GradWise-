@@ -3,7 +3,7 @@ import axios from 'axios';
 export class eventService {
   async getEvents() {
     try {
-      const response = await axios.post("http://localhost:3000/events/hackathons", {
+      const response = await axios.post(`${import.meta.env.BACKEND_URL}/events/hackathons`, {
         withCredentials: true
       });
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000/api/resume";
+const BASE_URL = `${import.meta.env.BACKEND_URL}/api/resume`;
 
 class ResumeService {
   async getDownloadLink() {
@@ -18,7 +18,7 @@ class ResumeService {
 
       const downloadLink = response.data.downloadLink;
       if (downloadLink) {
-        return `http://localhost:3000${downloadLink}`; // make it full URL
+        return `${import.meta.env.BACKEND_URL}${downloadLink}`; // make it full URL
       } else {
         throw new Error("Download link not found");
       }
