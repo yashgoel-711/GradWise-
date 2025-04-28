@@ -2,7 +2,7 @@ import Home from "./home/Home";
 import About from "./about/About";
 import Login from "./login/Login";
 import Register from './register/Register'
-import OpenAIHelper from "./messages/OpenAiHelper";
+import OpenAIHelper from "./messages/OpenAIHelper";
 import Dashboard from "./dashboard/Dashboard";
 import ProgressTracker from "./progress/ProgressTracker";
 import Courses from "./courses/Courses";
