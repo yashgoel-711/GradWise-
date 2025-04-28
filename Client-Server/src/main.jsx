@@ -7,7 +7,7 @@ import store from './store/store.js'
 import { Provider } from 'react-redux'
 
 import {UnAuthLayout , AuthLayout} from './layout/index.js'
-import { Home , About , Login , Register , Dashboard } from './pages/index.js'
+import { Home , About , Login , Register , Dashboard ,OpenAIHelper , ProgressTracker , Courses , Schedule , Opportunities ,Portfolio , Community} from './pages/index.js'
 
 const router  = createBrowserRouter([
   {
@@ -39,7 +39,36 @@ const router  = createBrowserRouter([
       {
         path:"/GradWise/dashboard",
         element: <Dashboard />
+      },
+      {
+        path: "/GradWise/OpenAI-Help",
+        element : <OpenAIHelper />
       }
+      ,{
+        path: "/GradWise/progress",
+        element : <ProgressTracker />
+      }
+      ,{
+        path: "/GradWise/courses",
+        element : <Courses />
+      }
+      ,{
+        path: "/GradWise/schedule",
+        element : <Schedule />
+      },
+      {
+        path : "/GradWise/opportunities",
+        element : <Opportunities />
+      },
+      {
+        path : "/GradWise/portfolio",
+        element: <Portfolio />
+      },
+      {
+        path : "/GradWise/community",
+        element: <Community />
+      }
+
     ]
   }
   

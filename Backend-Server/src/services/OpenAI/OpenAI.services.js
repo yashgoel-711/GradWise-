@@ -1,43 +1,16 @@
 import axios from "axios";
 
- // Replace with your OpenRouter API key
+
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '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';
 
-const AiReq = async (prompt)=>{
-    try {
-        const response = await axios.post(
-          OPENROUTER_API_URL,
-          {
-            model: 'google/gemma-3-4b-it:free', 
 
-            messages: [
-              { role: 'user',
-                 content: prompt
-                }
-            ],
-          },
-          {
-            headers: {
-              'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-    
-        return response.data.choices[0].message.content;
-      } catch (error) {
-        console.error('Error:', error);
-        return null;
-      }
-
-}
 // const Ainvidia = async (prompt) => {
 //   try {
 //     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
 //       method: "POST",
 //       headers: {
-//         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+//         "Authorization": Bearer ${OPENROUTER_API_KEY},
 //         // "HTTP-Referer": "<YOUR_SITE_URL>", // Optional
 //         // "X-Title": "<YOUR_SITE_NAME>",     // Optional
 //         "Content-Type": "application/json"
@@ -64,16 +37,17 @@ const AiReq = async (prompt)=>{
 //   }
 // };
 const Ainvidia = async (prompt) => {
+  // console.log(prompt)
   try {
     // console.log(OPENROUTER_API_KEY)
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "Authorization": `Bearer ${OPENROUTER_API_KEY} `,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "google/gemma-2-9b-it:free",
+        model: "google/gemma-3-4b-it:free",
         messages: [
           {
             role: "user",
@@ -84,7 +58,7 @@ const Ainvidia = async (prompt) => {
     });
 
     const data = await response.json();
-    // console.log("Full API response:", data);
+    console.log("Full API response:", data);
 
     if (!data?.choices?.[0]?.message?.content) {
       throw new Error("Invalid response structure from OpenRouter AI");
@@ -92,7 +66,8 @@ const Ainvidia = async (prompt) => {
 
     return data.choices[0].message.content;
 
-  } catch (error) {
+  }
+   catch (error) {
     console.error("Error fetching AI response:", error.message);
     throw {
       statusCode: 408,
@@ -104,4 +79,4 @@ const Ainvidia = async (prompt) => {
 };
 
 
-export {AiReq,Ainvidia}
+export {Ainvidia}

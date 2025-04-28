@@ -1,16 +1,55 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router'
+import WelcomeBanner from '../../components/auth/dashboard/WelcomeBanner'
+import {NotificationBell} from '../../components/auth/dashboard/NotificationBell'
+import { useNavigate } from 'react-router'
+import { useDispatch, useSelector } from "react-redux";
+import ChatBot from '../../components/chatbot/ChatBot'
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const notificationslol = useSelector((state) => state.notification.notifications);
+  const today = new Date();
+  function getTodayWithSuffix() {
+    const date = new Date();
+    const day = date.getDate();
+  
+    // Add suffix (st, nd, rd, th)
+    let suffix = "th";
+    if (day === 1 || day === 21 || day === 31) suffix = "st";
+    else if (day === 2 || day === 22) suffix = "nd";
+    else if (day === 3 || day === 23) suffix = "rd";
+  
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+  
+    return `${month} ${day}${suffix}, ${year}`;
+  }
+  const todayString = getTodayWithSuffix()
+  console.log(notificationslol)
+  const Navigate = useNavigate()
   const [stats, setStats] = useState({
     courses: 5,
     assignments: 12,
     upcomingDeadlines: 3,
     completionRate: 68
   })
+ 
+  const notifications = [
+    { id: 1, message: "Your assignment was graded", time: "2 mins ago", read: false },
+    { id: 2, message: "New course added: AI Ethics", time: "1 hour ago", read: true },
+    { id: 3, message: "You’ve earned a badge for 7-day streak!", time: "Yesterday", read: false }
+  ];
+  const todayNotifications = notificationslol.filter((notif) => {
+    return notif.message.includes(todayString);
+  });
+  console.log("today notification ",todayNotifications)
+  const allNotifications = [...notifications, ...todayNotifications].reverse();
+  console.log(allNotifications)
+
+
   
-  const { studentData } = useOutletContext();
   
   const [recentActivities, setRecentActivities] = useState([
     { id: 1, type: 'assignment', title: 'Research Paper Submission', course: 'Advanced Research Methods', date: '2025-04-18' },
@@ -21,8 +60,29 @@ const Dashboard = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+      <div className='flex justify-between'>
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
+      {/* <div className="bg-white rounded-lg shadow p-6 flex items-center space-x-4">
+    <img src="../../../public/Chatbot.png" alt="Chatbot" className="w-16 h-16" />
+  <div>
+    <h3 className="text-lg font-semibold">Need Help?</h3>
+    <p className="text-sm text-gray-600">I’m your friendly assistant!</p>
+  </div>
+</div> */}
+      <NotificationBell notifications = {allNotifications}/>
+      </div>
       
+      {/* chatbot */}
+      <ChatBot />
+      {/* <img
+      onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
+    src="../../../public/Chatbot.png"
+    alt="Chatbot"
+    className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
+  /> */}
+
+  
+        <WelcomeBanner  className="w-full"/>
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard title="Active Courses" value={stats.courses} icon="books" color="blue" />
@@ -33,27 +93,31 @@ const Dashboard = () => {
       
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Course Progress */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">Course Progress</h2>
-          <div className="space-y-4">
-            <CourseProgress course="Data Structures" progress={75} />
-            <CourseProgress course="Advanced Research Methods" progress={60} />
-            <CourseProgress course="Software Engineering" progress={90} />
-            <CourseProgress course="Machine Learning Fundamentals" progress={30} />
-            <CourseProgress course="Academic Writing" progress={85} />
-          </div>
-        </div>
+
+        <div className="w-[77vw] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+  {/* Course Progress */}
+  <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
+    <h2 className="text-xl font-semibold mb-4">Course Progress</h2>
+    <div className="space-y-4">
+      <CourseProgress course="Data Structures" progress={75} />
+      <CourseProgress course="Advanced Research Methods" progress={60} />
+      <CourseProgress course="Software Engineering" progress={90} />
+      <CourseProgress course="Machine Learning Fundamentals" progress={30} />
+      <CourseProgress course="Academic Writing" progress={85} />
+    </div>
+  </div>
+
+  {/* Recent Activity */}
+  <div className="bg-white rounded-lg shadow p-6">
+    <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+    <div className="space-y-4">
+      {recentActivities.map(activity => (
+        <ActivityItem key={activity.id} activity={activity} />
+      ))}
+    </div>
+  </div>
+</div>
         
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-          <div className="space-y-4">
-            {recentActivities.map(activity => (
-              <ActivityItem key={activity.id} activity={activity} />
-            ))}
-          </div>
-        </div>
       </div>
       
       {/* Upcoming Deadlines */}

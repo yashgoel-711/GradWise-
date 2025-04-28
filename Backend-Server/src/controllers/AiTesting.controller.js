@@ -2,6 +2,41 @@ import { Ainvidia } from "../services/OpenAI/OpenAI.services.js";
 import { apiError } from "../utils/apiError.utils.js";
 import { asyncAwaitHandler } from "../utils/asyncAwaitHandler.utils.js";
 import { apiResponse } from "../utils/apiResponse.utils.js";
+const AiProgressTracker = asyncAwaitHandler(async (req,res) => {
+  const prompt  = req.body.prompt
+  console.log("prompt from aiprogress tracker",prompt)
+  if(!prompt){
+    throw new apiError(400,"Prompt is required")
+
+  }
+  console.log(prompt)
+  try {
+    const aiResponse = await Ainvidia(prompt);
+    console.log(aiResponse)
+    console.log(typeof aiResponse)
+
+    return res.status(200).json({
+      success: true,
+      message: "AI response generated successfully",
+      data: aiResponse,
+    });
+
+  } catch (error) {
+    console.error("AI Generation Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to generate AI response",
+      error: error.message || "Unexpected error",
+    });
+  }
+
+  
+  
+
+  
+  
+})
 
 const Aihandle = asyncAwaitHandler(async (req, res) => {
   const { name, year } = req.student;
@@ -44,4 +79,4 @@ Do not include any introduction, closing remarks, or extra explanation — just 
 });
 
 
-export { Aihandle };
+export { Aihandle,AiProgressTracker };

@@ -3,28 +3,28 @@ import { CheckCircle, Users, Award, Code, Lightbulb, Heart } from 'lucide-react'
 
 const teamMembers = [
   {
-    name: "Aarav Sharma",
-    role: "Team Lead & AI Specialist",
-    image: "/api/placeholder/150/150",
-    bio: "Final year BTech student with expertise in machine learning and educational technology. Passionate about using AI to solve real-world problems in education."
+    name: "Yash Goel",
+    role: "Team Lead  & Backend Developer",
+    image: "../../public/YG1.jpg",
+    bio: "Second-year BTech student and AI enthusiast with a passion for applying artificial intelligence to solve real-world challenges. Originator of the GradWise project, driven by the vision to enhance the educational journey through innovative tech solutions."
   },
   {
-    name: "Priya Patel",
+    name: "Vaibhav Kumar Singh",
     role: "Frontend Developer",
-    image: "/api/placeholder/150/150",
-    bio: "Creative developer with a knack for UI/UX design. Dedicated to building intuitive interfaces that make complex data easily understandable."
+    image: "../../public/VKS.jpg",
+    bio: "Energetic and creative 2nd-year BTech student with a strong passion for UI/UX design. Played a key role in shaping the frontend of GradWise, focusing on intuitive, user-friendly interfaces. Known for bringing fresh ideas and motivating the team with a positive, can-do spirit."
   },
   {
-    name: "Rahul Kapoor",
-    role: "Backend Engineer",
-    image: "/api/placeholder/150/150",
-    bio: "Systems architect specializing in scalable solutions. Brings experience from previous internships at leading tech companies."
+    name: "Shashank Vaish",
+    role: "Backend Developer",
+    image: "../../public/SV.jpg",
+    bio: "Second-year BTech student with hands-on development experience through Smart India Hackathon. Currently contributing as a developer on the GradWise project, focused on building impactful solutions in the education domain."
   },
   {
-    name: "Zara Khan",
-    role: "Data Scientist",
-    image: "/api/placeholder/150/150",
-    bio: "Academic researcher focused on educational analytics and predictive modeling. Combines technical expertise with a deep understanding of student needs."
+    name: "Vihaan Kaushik",
+    role: "Frontend Developer",
+    image: "../../public/VK.jpg",
+    bio: "Second-year BTech student who contributed to frontend development and conducted in-depth research for the GradWise platform. Brings a thoughtful blend of technical skills and user-focused insights to enhance the student experience."
   }
 ];
 
@@ -70,7 +70,7 @@ const About = () => {
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2">
               <img 
-                src="/api/placeholder/600/400" 
+                src="../../public/team.jpg" 
                 alt="GradWise Team Brainstorming" 
                 className="rounded-xl shadow-lg"
               />
