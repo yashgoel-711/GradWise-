@@ -47,6 +47,9 @@ const studentSchema = new mongoose.Schema({
     courses: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Course'
+    }],
+    Roadmap: [{
+        type:String,
     }]
 
 },{timestamps:true})
@@ -62,6 +65,26 @@ studentSchema.pre("save", async function(next){
 studentSchema.methods.isPasswordCorrect = async function (password){
     return await bcrypt.compare(password,this.password)
 }
+studentSchema.statics.UpdateRoadmap = async function(studentId, taskArray) {
+    if (!studentId || !taskArray) {
+      throw new Error('Student ID and Task Array are required');
+    }
+  
+    // Find the student document first
+    const student = await this.findById(studentId);
+    
+    if (!student) {
+      throw new Error('Student not found');
+    }
+  
+    // Update the roadmap
+    student.Roadmap = taskArray;
+  
+    // Save the updated document
+    await student.save();
+  
+    return student.Roadmap;
+  };
 
 
 studentSchema.methods.generateToken = async function(){
