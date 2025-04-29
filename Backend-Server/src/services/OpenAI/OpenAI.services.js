@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = '';
 
 
 // const Ainvidia = async (prompt) => {
@@ -40,7 +40,7 @@ const Ainvidia = async (prompt) => {
   // console.log(prompt)
   try {
     // console.log(OPENROUTER_API_KEY)
-    const response = await fetch("https://router.huggingface.co/novita/v3/openai/chat/completions", {
+    const response = await fetch(`${OPENROUTER_API_URL}`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${OPENROUTER_API_KEY} `,

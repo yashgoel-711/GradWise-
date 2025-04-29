@@ -85,6 +85,26 @@ studentSchema.statics.UpdateRoadmap = async function(studentId, taskArray) {
   
     return student.Roadmap;
   };
+  studentSchema.statics.UpdateSkills = async function(studentId, skillsArray) {
+    if (!studentId || !skillsArray) {
+      throw new Error('Student ID and Skills Array are required');
+    }
+  
+    // Find the student document first
+    const student = await this.findById(studentId);
+    
+    if (!student) {
+      throw new Error('Student not found');
+    }
+  
+    // Update the skills
+    student.skills = skillsArray;
+  
+    // Save the updated document
+    await student.save();
+  
+    return student.skills;
+  };
 
 
 studentSchema.methods.generateToken = async function(){
