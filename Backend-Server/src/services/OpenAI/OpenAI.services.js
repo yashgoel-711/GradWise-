@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = process.env.HUGGINGFACE_TOKEN;
 
 
 // const Ainvidia = async (prompt) => {
@@ -40,14 +40,14 @@ const Ainvidia = async (prompt) => {
   // console.log(prompt)
   try {
     // console.log(OPENROUTER_API_KEY)
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const response = await fetch(`${OPENROUTER_API_URL}`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${OPENROUTER_API_KEY} `,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "google/gemma-3-4b-it:free",
+        model: "deepseek-ai/DeepSeek-V3-0324",
         messages: [
           {
             role: "user",

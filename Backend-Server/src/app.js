@@ -19,10 +19,14 @@ import aiRouter from "./routes/ai.routes.js"
 import eventRouter from "./routes/events.routes.js"
 import internshipRouter from "./routes/intership.routes.js"
 import resumeRoutes from "./routes/resume.routes.js";
+import courseRouter from "./routes/course.routes.js"
+import projectRouter from "./routes/project.routes.js"
 app.use("/student",studentRouter)
 app.use('/ai',aiRouter)
 app.use('/events',eventRouter)
 app.use('/internship',internshipRouter)
 app.use("/api", resumeRoutes);
+app.use("/student/projects",projectRouter)
+app.use("/student/course",courseRouter)
 
 export {app}
