@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_API_KEY = '';
+const OPENROUTER_API_KEY = process.env.HUGGINGFACE_TOKEN;
 
 
 // const Ainvidia = async (prompt) => {
