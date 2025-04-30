@@ -90,6 +90,7 @@ if (!loggedInStudent) {
 const options = {
   httpOnly: true,
   secure: true,
+  sameSite: 'None',
 };
 
 return res
@@ -123,8 +124,18 @@ console.log('logout hitting');
       .clearCookie("token", options)
       .json(new apiResponse(200, {}, "student Logged Out"));
 });
+const updateStudentSkills = asyncAwaitHandler(async (req,res)=>{
+  const {skills}  = req.body
+  if(!skills || skills.length === 0){
+    throw new apiError(400,"must pass skills to update")
+  }
+  const studentskills = await Student.UpdateSkills(req.student._id,skills)
+  if(!studentskills){
+    throw new apiError(500,"error while updating skills")
+  }
+  return res.status(200).json(new apiResponse(200,studentskills,"successfully updated skills"))
+})
 
 
 
-
-export { registerStudent , loginStudent , logoutStudent};
+export { registerStudent , loginStudent , logoutStudent,updateStudentSkills};
