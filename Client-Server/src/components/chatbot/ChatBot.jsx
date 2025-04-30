@@ -159,7 +159,7 @@ const ChatBot = () => {
       />
       
       {/* CSS for animations */}
-      <style jsx>{`
+      <style >{`
         .bounce {
           animation: bounce 1s;
         }

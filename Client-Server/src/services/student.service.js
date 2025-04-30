@@ -6,7 +6,7 @@ export class StudentService{
     
     async createAccount(data){
         try {
-            console.log(import.meta)
+            
             
             // console.log(data);  
             const response = await axios.post(`${BackendURL}/student/register-Student`, data );  
@@ -19,13 +19,14 @@ export class StudentService{
     }
 
     async login(data){
-        
         try {
+            // console.log(data)
+            //     console.log(BackendURL)
             const response = await axios.post(`${BackendURL}/student/login-Student`, data ,{ withCredentials: true }); 
             console.log(response)                     
             return response;
         } catch (error) {
-            console.error('backend service error student login failed :: ', error)
+            console.error('backend service error student login failed :: ', error.message)
         }
     }
 
