@@ -176,7 +176,6 @@ const Navbar = ({ studentData }) => {
             {isExpanded && (
               <div className="ml-3">
                 <p className="font-medium">{studentData?.name}</p>
-                <p className="text-sm text-gray-400">{studentData?.email || studentData?.name}</p>
               </div>
             )}
           </div>
