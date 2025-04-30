@@ -2,6 +2,7 @@ import { Ainvidia } from "../services/OpenAI/OpenAI.services.js";
 import { apiError } from "../utils/apiError.utils.js";
 import { asyncAwaitHandler } from "../utils/asyncAwaitHandler.utils.js";
 import { apiResponse } from "../utils/apiResponse.utils.js";
+import { Student } from "../models/Student.model.js";
 const AiProgressTracker = asyncAwaitHandler(async (req,res) => {
   const prompt  = req.body.prompt
   console.log("prompt from aiprogress tracker",prompt)
@@ -39,6 +40,7 @@ const AiProgressTracker = asyncAwaitHandler(async (req,res) => {
 })
 
 const Aihandle = asyncAwaitHandler(async (req, res) => {
+
   const { name, year } = req.student;
   const course = "B.Tech";
 
@@ -66,16 +68,20 @@ Do not include any introduction, closing remarks, or extra explanation — just 
   const taskArray = response
     .split('\n')
     .map(line => line.replace(/^[-•*\d.]+\s*/, '').trim()) // remove bullet symbols/numbers
-    .filter(task => task.length > 0); // remove empty lines
+    .filter(task => task.length > 0);
+  const TaskArray  = await Student.UpdateRoadmap(req.student._id,taskArray)
+  console.log(TaskArray)
+  // remove empty lines
 
   return res.status(200).json(
     new apiResponse(200, {
       name,
       course,
       year,
-      roadmap: taskArray,
+      roadmap:  TaskArray,
     })
   );
+
 });
 
 

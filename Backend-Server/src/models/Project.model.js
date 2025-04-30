@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { apiError } from "../utils/apiError.utils";
+import { apiError } from "../utils/apiError.utils.js";
 
 const projectSchema = new mongoose.Schema({
 

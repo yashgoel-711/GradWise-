@@ -9,6 +9,10 @@ const courseSchema = new mongoose.Schema({
 
   //AI will analyse the below fields
   title: String,
+  uploadedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Student'
+  },
   platform: String, // YouTube, Coursera, Udemy, etc.
   difficulty: {
     type: String,
@@ -19,7 +23,7 @@ const courseSchema = new mongoose.Schema({
   tags: [String], // React, Web Dev, DSA, etc.
 
 }, { timestamps: true });
-courseSchema.methods.GetInfoCourseDetails = async function(id){
+courseSchema.statics.GetInfoCourseDetails = async function(id){
   if(!id){
     throw new apiError(400,"give the  id of the student  course details") 
   }
