@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router'
+// All Redux-related imports are kept intact
 import WelcomeBanner from '../../components/auth/dashboard/WelcomeBanner'
-import {NotificationBell} from '../../components/auth/dashboard/NotificationBell'
+import { NotificationBell } from '../../components/auth/dashboard/NotificationBell'
 import { useNavigate } from 'react-router'
 import { useDispatch, useSelector } from "react-redux";
 import ChatBot from '../../components/chatbot/ChatBot'
@@ -10,7 +11,8 @@ import ChatBot from '../../components/chatbot/ChatBot'
 const Dashboard = () => {
   const dispatch = useDispatch();
   const notificationslol = useSelector((state) => state.notification.notifications);
-  const today = new Date();
+  const isNavExpanded = useSelector((state) => state.navbar.isExpanded); // Get navbar state from Redux store
+
   function getTodayWithSuffix() {
     const date = new Date();
     const day = date.getDate();
@@ -39,18 +41,15 @@ const Dashboard = () => {
   const notifications = [
     { id: 1, message: "Your assignment was graded", time: "2 mins ago", read: false },
     { id: 2, message: "New course added: AI Ethics", time: "1 hour ago", read: true },
-    { id: 3, message: "You’ve earned a badge for 7-day streak!", time: "Yesterday", read: false }
+    { id: 3, message: "You've earned a badge for 7-day streak!", time: "Yesterday", read: false }
   ];
   const todayNotifications = notificationslol.filter((notif) => {
     return notif.message.includes(todayString);
   });
-  console.log("today notification ",todayNotifications)
+  console.log("today notification ", todayNotifications)
   const allNotifications = [...notifications, ...todayNotifications].reverse();
   console.log(allNotifications)
 
-
-  
-  
   const [recentActivities, setRecentActivities] = useState([
     { id: 1, type: 'assignment', title: 'Research Paper Submission', course: 'Advanced Research Methods', date: '2025-04-18' },
     { id: 2, type: 'grade', title: 'Mid-term Exam', course: 'Data Structures', grade: 'A-', date: '2025-04-15' },
@@ -58,108 +57,103 @@ const Dashboard = () => {
     { id: 4, type: 'feedback', title: 'Project Feedback', course: 'Software Engineering', date: '2025-04-08' }
   ])
 
+  // Dynamic classes based on navbar expansion state
+  const containerClass = isNavExpanded 
+    ? "p-6 bg-gray-100 min-h-screen transition-all duration-300" 
+    : "p-6 bg-gray-100 min-h-screen transition-all duration-300 ml-0";
+
+  // Content adjustment based on navbar state
+  const contentClass = isNavExpanded
+    ? "w-full transition-all duration-300"
+    : "w-full transition-all duration-300 pl-16"; // Add padding when navbar is collapsed
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className='flex justify-between'>
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
-      {/* <div className="bg-white rounded-lg shadow p-6 flex items-center space-x-4">
-    <img src="../../../public/Chatbot.png" alt="Chatbot" className="w-16 h-16" />
-  <div>
-    <h3 className="text-lg font-semibold">Need Help?</h3>
-    <p className="text-sm text-gray-600">I’m your friendly assistant!</p>
-  </div>
-</div> */}
-      <NotificationBell notifications = {allNotifications}/>
-      </div>
-      
-      {/* chatbot */}
-      <ChatBot />
-      {/* <img
-      onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
-    src="../../../public/Chatbot.png"
-    alt="Chatbot"
-    className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
-  /> */}
-
-  
-        <WelcomeBanner  className="w-full"/>
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard title="Active Courses" value={stats.courses} icon="books" color="blue" />
-        <StatCard title="Pending Assignments" value={stats.assignments} icon="document" color="yellow" />
-        <StatCard title="Upcoming Deadlines" value={stats.upcomingDeadlines} icon="calendar" color="red" />
-        <StatCard title="Completion Rate" value={`${stats.completionRate}%`} icon="chart" color="green" />
-      </div>
-      
-      {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <div className="w-[77vw] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-  {/* Course Progress */}
-  <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-    <h2 className="text-xl font-semibold mb-4">Course Progress</h2>
-    <div className="space-y-4">
-      <CourseProgress course="Data Structures" progress={75} />
-      <CourseProgress course="Advanced Research Methods" progress={60} />
-      <CourseProgress course="Software Engineering" progress={90} />
-      <CourseProgress course="Machine Learning Fundamentals" progress={30} />
-      <CourseProgress course="Academic Writing" progress={85} />
-    </div>
-  </div>
-
-  {/* Recent Activity */}
-  <div className="bg-white rounded-lg shadow p-6">
-    <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-    <div className="space-y-4">
-      {recentActivities.map(activity => (
-        <ActivityItem key={activity.id} activity={activity} />
-      ))}
-    </div>
-  </div>
-</div>
+    <div className={containerClass}>
+      <div className={contentClass}>
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
+          <NotificationBell notifications={allNotifications} />
+        </div>
         
-      </div>
-      
-      {/* Upcoming Deadlines */}
-      <div className="mt-8 bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold mb-4">Upcoming Deadlines</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assignment</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Final Project</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Software Engineering</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Apr 25, 2025</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">In Progress</span>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Research Paper</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Advanced Research Methods</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Apr 30, 2025</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Not Started</span>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Final Exam</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Data Structures</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 05, 2025</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Upcoming</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        {/* chatbot */}
+        <ChatBot />
+    
+        <WelcomeBanner className="w-full" />
+        
+        {/* Stats Cards - Responsive Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+          <StatCard title="Active Courses" value={stats.courses} icon="books" color="blue" />
+          <StatCard title="Pending Assignments" value={stats.assignments} icon="document" color="yellow" />
+          <StatCard title="Upcoming Deadlines" value={stats.upcomingDeadlines} icon="calendar" color="red" />
+          <StatCard title="Completion Rate" value={`${stats.completionRate}%`} icon="chart" color="green" />
+        </div>
+        
+        {/* Main Content - Adjusted for Nav Collapse */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Course Progress */}
+          <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-4">Course Progress</h2>
+            <div className="space-y-4">
+              <CourseProgress course="Data Structures" progress={75} />
+              <CourseProgress course="Advanced Research Methods" progress={60} />
+              <CourseProgress course="Software Engineering" progress={90} />
+              <CourseProgress course="Machine Learning Fundamentals" progress={30} />
+              <CourseProgress course="Academic Writing" progress={85} />
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+            <div className="space-y-4">
+              {recentActivities.map(activity => (
+                <ActivityItem key={activity.id} activity={activity} />
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Upcoming Deadlines */}
+        <div className="mt-8 bg-white rounded-lg shadow p-6 overflow-hidden">
+          <h2 className="text-xl font-semibold mb-4">Upcoming Deadlines</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assignment</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Final Project</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Software Engineering</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Apr 25, 2025</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">In Progress</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Research Paper</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Advanced Research Methods</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Apr 30, 2025</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Not Started</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Final Exam</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Data Structures</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 05, 2025</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Upcoming</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
