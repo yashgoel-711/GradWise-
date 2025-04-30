@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect , useState } from 'react';
 import studentService from '../../services/student.service';
 import { useNavigate, useLocation } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleSidebar } from '../../store/features/navbarSlice.js'; // Import the action
 
-const Navbar = () => {
+const Navbar = ({ studentData }) => {
   const Navigate = useNavigate();
   const location = useLocation();
-  const [isExpanded, setIsExpanded] = useState(true);
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const studentData = useSelector((state) => state.trackAuth.studentData);
   const [activeRoute, setActiveRoute] = useState('');
+  
+  // Get isExpanded from Redux store
+  const isExpanded = useSelector((state) => state.navbar.isExpanded);
 
   // Set active route based on current location
   useEffect(() => {
@@ -27,6 +30,11 @@ const Navbar = () => {
       Navigate('/login')
     }
   }
+
+  // Toggle sidebar function using Redux
+  const handleToggleSidebar = () => {
+    dispatch(toggleSidebar());
+  };
 
   // Helper function to check if route is active
   const isRouteActive = (route) => {
@@ -54,7 +62,7 @@ const Navbar = () => {
             <h1 className="text-xl font-bold text-indigo-400">GW</h1>
           )}
           <button 
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={handleToggleSidebar}
             className="p-1 rounded-full hover:bg-gray-700"
           >
             {isExpanded ? (
@@ -162,13 +170,13 @@ const Navbar = () => {
           <div className="flex items-center p-4">
             <div className="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center">
               <span className="font-medium text-white">
-                {studentData.name ? studentData.name.charAt(0) : "U"}
+                {studentData?.name ? studentData.name.charAt(0) : "U"}
               </span>
             </div>
             {isExpanded && (
               <div className="ml-3">
-                <p className="font-medium">{studentData.name}</p>
-                <p className="text-sm text-gray-400">{studentData.email || studentData.name}</p>
+                <p className="font-medium">{studentData?.name}</p>
+                <p className="text-sm text-gray-400">{studentData?.email || studentData?.name}</p>
               </div>
             )}
           </div>
@@ -178,9 +186,11 @@ const Navbar = () => {
   );
 };
 
-// Helper component for nav items
+// Don't forget to include the NavItem component as in your original code
 const NavItem = ({ icon, label, isExpanded, isActive = false, onClick }) => {
   const getIcon = (iconName) => {
+    // Your existing icon definitions remain the same
+    // ... (keep all the switch case logic for icons)
     switch (iconName) {
       case 'opportunities':
         return (
