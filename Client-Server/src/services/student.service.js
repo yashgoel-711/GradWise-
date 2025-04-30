@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import {BackendURL} from '../config/config.js'
 export class StudentService{
    
 
@@ -9,7 +9,7 @@ export class StudentService{
             console.log(import.meta)
             
             // console.log(data);  
-            const response = await axios.post(`https://gradwise.onrender.com/student/register-Student`, data );  
+            const response = await axios.post(`${BackendURL}/student/register-Student`, data );  
             console.log(response)
             await this.login(data)
             return response;
@@ -21,7 +21,7 @@ export class StudentService{
     async login(data){
         
         try {
-            const response = await axios.post(`https://gradwise.onrender.com/student/login-Student`, data ,{ withCredentials: true }); 
+            const response = await axios.post(`${BackendURL}/student/login-Student`, data ,{ withCredentials: true }); 
             console.log(response)                     
             return response;
         } catch (error) {
@@ -31,7 +31,7 @@ export class StudentService{
 
     async logout(){
         try {
-            const response = await axios.post(`https://gradwise.onrender.com/student/logout-Student`,{},{ withCredentials: true });
+            const response = await axios.post(`${BackendURL}/student/logout-Student`,{},{ withCredentials: true });
             if(response){
                 return response;
             }
@@ -41,7 +41,7 @@ export class StudentService{
     }
     async AiData(data){
         try {
-            const response = await axios.post(`https://gradwise.onrender.com/ai/api/test/`,data,{ withCredentials: true });
+            const response = await axios.post(`${BackendURL}/ai/api/test/`,data,{ withCredentials: true });
             if(response){
                 return response;
             }

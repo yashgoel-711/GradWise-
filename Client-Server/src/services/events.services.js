@@ -1,9 +1,9 @@
 import axios from 'axios';
-
+import {BackendURL} from '../config/config.js'
 export class eventService {
   async getEvents() {
     try {
-      const response = await axios.post(`https://gradwise.onrender.com/events/hackathons`, {
+      const response = await axios.post(`${BackendURL}/events/hackathons`, {
         withCredentials: true
       });
 
