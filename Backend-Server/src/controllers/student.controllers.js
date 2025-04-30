@@ -90,6 +90,7 @@ if (!loggedInStudent) {
 const options = {
   httpOnly: true,
   secure: true,
+  sameSite: 'None',
 };
 
 return res
