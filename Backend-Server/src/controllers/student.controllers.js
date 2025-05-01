@@ -63,6 +63,7 @@ const registerStudent = asyncAwaitHandler(async (req, res) => {
 });
 
 const loginStudent = asyncAwaitHandler(async(req,res)=>{
+  console.log(req.body)
   const {email,contact,password} = req.body
   if((!contact || !email) && !password){
     throw new apiError(400,"must pass credentials to login")
@@ -90,6 +91,7 @@ if (!loggedInStudent) {
 const options = {
   httpOnly: true,
   secure: true,
+  sameSite: 'None',
 };
 
 return res
