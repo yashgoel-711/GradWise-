@@ -174,10 +174,12 @@ const Navbar = ({ studentData }) => {
               </span>
             </div>
             {isExpanded && (
+              <button type="button" onClick={()=>{Navigate("/GradWise/profile")}} className='hover:cursor-pointer'>
+
               <div className="ml-3">
                 <p className="font-medium">{studentData?.name}</p>
-                <p className="text-sm text-gray-400">{studentData?.email || studentData?.name}</p>
               </div>
+              </button>
             )}
           </div>
         </div>
