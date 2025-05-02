@@ -9,7 +9,7 @@ export class StudentService{
             console.log(import.meta)
             
             // console.log(data);  
-            const response = await axios.post(`https://gradwise.onrender.com/student/register-Student`, data );  
+            const response = await axios.post(`${BackendURL}/student/register-Student`, data );  
             console.log(response)
             await this.login(data)
             return response;
