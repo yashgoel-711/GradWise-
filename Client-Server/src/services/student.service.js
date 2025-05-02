@@ -6,7 +6,7 @@ export class StudentService{
     
     async createAccount(data){
         try {
-            console.log(import.meta)
+            // console.log(import.meta)
             
             // console.log(data);  
             const response = await axios.post(`${BackendURL}/student/register-Student`, data );  
