@@ -57,20 +57,17 @@ const Ainvidia = async (prompt) => {
       })
     });
 
-    const data = await response.json();
-    console.log("Full API response:", data);
+    const generatedText = response.data?.text;
 
-    if (!data?.choices?.[0]?.message?.content) {
-      throw new Error("Invalid response structure from OpenRouter AI");
+    if (!generatedText) {
+      throw new Error("No text returned from GPT-2 API");
     }
 
-    return data.choices[0].message.content;
-
-  }
-   catch (error) {
-    console.error("Error fetching AI response:", error.message);
+    return generatedText;
+  } catch (error) {
+    console.error("Error communicating with GPT-2 API:", error.message);
     throw {
-      statusCode: 408,
+      statusCode: 500,
       success: false,
       errors: [error.message],
       data: null
@@ -78,5 +75,4 @@ const Ainvidia = async (prompt) => {
   }
 };
 
-
-export {Ainvidia}
+export { Ainvidia };
