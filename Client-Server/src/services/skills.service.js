@@ -10,20 +10,26 @@ export class SkillsService{
             console.error('backend service error student skills update failed :: ', error)
         }
     }
-    async getSkills(){
+    async getSkills() {
         try {
-            const response = await axios.post(`${BackendURL}/student/get-skills-student`,{
-                withCredentials: true,
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              });  
-            console.log('response in skills service',response)
-            return response;
+            const response = await axios.post(
+                `${BackendURL}/student/get-skills-student`, // URL
+                {}, // No data needed in body
+                {
+                    withCredentials: true, // Send cookies (if using cookie-based auth)
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // 'Authorization': `Bearer ${token}`, // Uncomment if using JWT
+                    },
+                }
+            );
+            console.log('response in skills service', response);
+            return response.data; // Or just return response depending on your need
         } catch (error) {
-            console.error('backend service error student skills get failed :: ', error)
+            console.error('backend service error student skills get failed :: ', error.response?.data || error.message);
         }
     }
+    
 }
 const skillsService = new SkillsService();
 export default skillsService

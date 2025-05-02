@@ -23,6 +23,7 @@ const StudentProfile = () => {
 
   // Initialize with default values and update when student data is available
   useEffect(() => {
+
     // Always set default values first to ensure fields aren't empty
     const defaultProfile = {
       name: 'Yash Goel',
@@ -32,6 +33,7 @@ const StudentProfile = () => {
       branch: 'Computer Science',
       domain: 'Software Engineering',
       avatar: 'https://via.placeholder.com/150'
+
     };
     
     // Merge with any available student data
@@ -287,6 +289,7 @@ const StudentProfile = () => {
         >
           <Edit2 size={18} />
         </button>
+
         <h2 className="text-2xl font-bold mb-6 text-indigo-700">Skills</h2>
         <div className="space-y-6">
           {skills.map(skill => (
@@ -303,6 +306,7 @@ const StudentProfile = () => {
               </div>
             </div>
           ))}
+
         </div>
       </div>
     );
