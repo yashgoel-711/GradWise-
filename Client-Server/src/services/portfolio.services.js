@@ -1,12 +1,11 @@
 import axios from "axios";
-
-const BASE_URL = `https://gradwise.onrender.com/api/resume`;
+import {BackendURL} from "../config/config.js"
 
 class ResumeService {
   async getDownloadLink() {
     try {
       const response = await axios.post(
-        `${BASE_URL}`,
+        `${BackendURL}`,
         {},
         {
           withCredentials: true,
@@ -18,7 +17,7 @@ class ResumeService {
 
       const downloadLink = response.data.downloadLink;
       if (downloadLink) {
-        return `https://gradwise.onrender.com${downloadLink}`; // make it full URL
+        return `${BackendURL}${downloadLink}`; // make it full URL
       } else {
         throw new Error("Download link not found");
       }
