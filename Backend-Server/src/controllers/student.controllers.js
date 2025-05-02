@@ -63,6 +63,7 @@ const registerStudent = asyncAwaitHandler(async (req, res) => {
 });
 
 const loginStudent = asyncAwaitHandler(async(req,res)=>{
+  console.log(req.body)
   const {email,contact,password} = req.body
   if((!contact || !email) && !password){
     throw new apiError(400,"must pass credentials to login")
@@ -125,7 +126,10 @@ console.log('logout hitting');
       .json(new apiResponse(200, {}, "student Logged Out"));
 });
 const updateStudentSkills = asyncAwaitHandler(async (req,res)=>{
-  const {skills}  = req.body
+
+  console.log(req.body)
+  const skills  = req.body
+  
   if(!skills || skills.length === 0){
     throw new apiError(400,"must pass skills to update")
   }
