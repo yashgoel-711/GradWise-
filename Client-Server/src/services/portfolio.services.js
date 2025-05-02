@@ -1,4 +1,4 @@
-import {BackendURL} from '../config/config.js'
+
 import axios from "axios";
 import {BackendURL} from "../config/config.js"
 
