@@ -7,6 +7,7 @@ import { NotificationBell } from '../../components/auth/dashboard/NotificationBe
 import { useNavigate } from 'react-router'
 import { useDispatch, useSelector } from "react-redux";
 import ChatBot from '../../components/chatbot/ChatBot'
+import DropDownNav from '../../components/auth/dashboard/DropDownNav'
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -72,7 +73,10 @@ const Dashboard = () => {
       <div className={contentClass}>
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
+          <div className='flex gap-10 items-center'>
           <NotificationBell notifications={allNotifications} />
+          <DropDownNav />
+          </div>
         </div>
         
         {/* chatbot */}

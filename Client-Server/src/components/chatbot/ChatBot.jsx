@@ -150,7 +150,7 @@ const ChatBot = () => {
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        src="https://asset.cloudinary.com/dip0evlp9/e7ae746edd9d84b4747e172d8ea89595"
+        src="https://res.cloudinary.com/dip0evlp9/image/upload/v1745919572/Chatbot_kwkr0k.png"
         alt="Chatbot"
         className={`w-25 h-25 cursor-pointer transition-transform
                    ${isHovering ? 'scale-110' : ''}

@@ -21,16 +21,7 @@ const Navbar = ({ studentData }) => {
     setActiveRoute(route);
   }, [location]);
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    const response = await studentService.logout();
-    if(response){
-      setIsLoading(false);
-      Navigate('/login')
-    }
-  }
-
+  
   // Toggle sidebar function using Redux
   const handleToggleSidebar = () => {
     dispatch(toggleSidebar());
@@ -156,33 +147,12 @@ const Navbar = ({ studentData }) => {
               isActive={isRouteActive('help')}
               // onClick={()=>{Navigate("/GradWise/help")}} 
             />
-            <NavItem 
-              icon="logout" 
-              label="logout" 
-              isExpanded={isExpanded} 
-              onClick={handleSubmit} 
-            />
+            
           </div>
         </nav>
         
         {/* User Profile - Moved outside the scrollable area */}
-        <div className="border-t border-gray-700 mt-auto">
-          <div className="flex items-center p-4">
-            <div className="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center">
-              <span className="font-medium text-white">
-                {studentData?.name ? studentData.name.charAt(0) : "U"}
-              </span>
-            </div>
-            {isExpanded && (
-              <button type="button" onClick={()=>{Navigate("/GradWise/profile")}} className='hover:cursor-pointer'>
-
-              <div className="ml-3">
-                <p className="font-medium">{studentData?.name}</p>
-              </div>
-              </button>
-            )}
-          </div>
-        </div>
+       
       </div>
     </>
   );

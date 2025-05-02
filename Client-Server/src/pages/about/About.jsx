@@ -5,25 +5,25 @@ const teamMembers = [
   {
     name: "Yash Goel",
     role: "Team Lead  & Backend Developer",
-    image: "https://asset.cloudinary.com/dip0evlp9/edf99dc1d8e4102bbb31b67d2e4e29c1",
+    image: "https://res.cloudinary.com/dip0evlp9/image/upload/v1745919643/yg1_vuwylp.jpg",
     bio: "Second-year BTech student and AI enthusiast with a passion for applying artificial intelligence to solve real-world challenges. Originator of the GradWise project, driven by the vision to enhance the educational journey through innovative tech solutions."
   },
   {
     name: "Vaibhav Kumar Singh",
     role: "Frontend Developer",
-    image: "https://asset.cloudinary.com/dip0evlp9/711282d61e60e1fbfdeee4d8dd997c8e",
+    image: "https://res.cloudinary.com/dip0evlp9/image/upload/v1745919608/VKS_njwh7r.jpg",
     bio: "Energetic and creative 2nd-year BTech student with a strong passion for UI/UX design. Played a key role in shaping the frontend of GradWise, focusing on intuitive, user-friendly interfaces. Known for bringing fresh ideas and motivating the team with a positive, can-do spirit."
   },
   {
     name: "Shashank Vaish",
     role: "Backend Developer",
-    image: "https://asset.cloudinary.com/dip0evlp9/c79061a3773008e4e5c8333d16601cee",
+    image: "https://res.cloudinary.com/dip0evlp9/image/upload/v1745919587/SV_hyskfj.jpg",
     bio: "Second-year BTech student with hands-on development experience through Smart India Hackathon. Currently contributing as a developer on the GradWise project, focused on building impactful solutions in the education domain."
   },
   {
     name: "Vihaan Kaushik",
     role: "Frontend Developer",
-    image: "https://asset.cloudinary.com/dip0evlp9/a91fe2db22c7bf54f60f15539ad5e393",
+    image: "https://res.cloudinary.com/dip0evlp9/image/upload/v1745919591/VK_tsj6va.jpg",
     bio: "Second-year BTech student who contributed to frontend development and conducted in-depth research for the GradWise platform. Brings a thoughtful blend of technical skills and user-focused insights to enhance the student experience."
   }
 ];
@@ -70,7 +70,7 @@ const About = () => {
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2">
               <img 
-                src="https://asset.cloudinary.com/dip0evlp9/076624d503b4655d888c10f3ee3ac2c2" 
+                src="https://res.cloudinary.com/dip0evlp9/image/upload/v1745919583/team_heptjq.jpg" 
                 alt="GradWise Team Brainstorming" 
                 className="rounded-xl shadow-lg"
               />

@@ -1,13 +1,12 @@
-import {BackendURL} from '../config/config.js'
-import axios from "axios";
 
-const BASE_URL = `${BackendURL}/api/resume`;
+import axios from "axios";
+import {BackendURL} from "../config/config.js"
 
 class ResumeService {
   async getDownloadLink() {
     try {
       const response = await axios.post(
-        `${BASE_URL}`,
+        `${BackendURL}`,
         {},
         {
           withCredentials: true,
