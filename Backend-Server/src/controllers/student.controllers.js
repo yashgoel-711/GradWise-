@@ -126,7 +126,10 @@ console.log('logout hitting');
       .json(new apiResponse(200, {}, "student Logged Out"));
 });
 const updateStudentSkills = asyncAwaitHandler(async (req,res)=>{
-  const {skills}  = req.body
+
+  console.log(req.body)
+  const skills  = req.body
+  
   if(!skills || skills.length === 0){
     throw new apiError(400,"must pass skills to update")
   }

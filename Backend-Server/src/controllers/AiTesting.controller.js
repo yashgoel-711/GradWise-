@@ -1,4 +1,4 @@
-import { Ainvidia } from "../services/OpenAI/OpenAI.services.js";
+import { Aigpt2 } from "../services/OpenAI/OpenAI.services.js";
 import { apiError } from "../utils/apiError.utils.js";
 import { asyncAwaitHandler } from "../utils/asyncAwaitHandler.utils.js";
 import { apiResponse } from "../utils/apiResponse.utils.js";
@@ -12,7 +12,7 @@ const AiProgressTracker = asyncAwaitHandler(async (req,res) => {
   }
   console.log(prompt)
   try {
-    const aiResponse = await Ainvidia(prompt);
+    const aiResponse = await Aigpt2(prompt);
     console.log(aiResponse)
     console.log(typeof aiResponse)
 
@@ -58,7 +58,7 @@ Only include action steps, skills to learn, certifications, internships, or proj
 Do not include any introduction, closing remarks, or extra explanation — just the tasks.
 `;
 
-  const response = await Ainvidia(prompt);
+  const response = await Aigpt2(prompt);
 
   if (!response) {
     throw new apiError(408, "Cannot get the response from AI");
