@@ -139,17 +139,6 @@ const updateStudentSkills = asyncAwaitHandler(async (req,res)=>{
   }
   return res.status(200).json(new apiResponse(200,studentskills,"successfully updated skills"))
 })
-const getStudentSkills = asyncAwaitHandler(async (req,res)=>{
-  const student = req.student
-  if(!student){
-    throw new apiError(400,"you must be logged IN")
-  }
-  const skills = await Student.getSkills(student._id)
-  if(!skills){
-    throw new apiError(500,"error while getting skills")
-  }
-  return res.status(200).json(new apiResponse(200,skills,"successfully got skills"))
-})
 
 
-export { registerStudent , loginStudent , logoutStudent,updateStudentSkills,getStudentSkills};
+export { registerStudent , loginStudent , logoutStudent,updateStudentSkills};

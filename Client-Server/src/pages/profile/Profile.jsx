@@ -37,11 +37,7 @@ const StudentProfile = () => {
       try {
         const response = await skillsService.getSkills();
         if (Array.isArray(response.data)) {
-          const formattedSkills = response.data.map((skill, index) => ({
-            id: index + 1,
-            name: skill.name || skill,
-            level: skill.level || 50,
-          }));
+          const formattedSkills = response.data
           setSkills(formattedSkills);
         }
       } catch (error) {
@@ -299,20 +295,20 @@ const StudentProfile = () => {
         </button>
         <h2 className="text-xl font-bold mb-4">Skills</h2>
         <div className="space-y-4">
-          {skills.map(skill => (
-            <div key={skill.id} className="space-y-1">
-              <div className="flex justify-between">
-                <span className="font-medium">{skill.name}</span>
-                <span className="text-sm text-gray-500">{skill.level}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-blue-600 h-2 rounded-full"
-                  style={{ width: `${skill.level}%` }}
-                ></div>
-              </div>
-            </div>
-          ))}
+        {skills.map((skill, index) => (
+  <div key={index} className="space-y-1">
+    <div className="flex justify-between">
+      <span className="font-medium">{skill}</span>
+      <span className="text-sm text-gray-500">50%</span>
+    </div>
+    <div className="w-full bg-gray-200 rounded-full h-2">
+      <div
+        className="bg-blue-600 h-2 rounded-full"
+        style={{ width: '50%' }}
+      ></div>
+    </div>
+  </div>
+))}
         </div>
       </div>
     );
