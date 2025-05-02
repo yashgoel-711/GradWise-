@@ -37,35 +37,35 @@ const router  = createBrowserRouter([
     element: <AuthLayout/>,
     children : [
       {
-        path:"/GradWise/dashboard",
+        path:"dashboard",
         element: <Dashboard />
       },
       {
-        path: "/GradWise/OpenAI-Help",
+        path: "OpenAI-Help",
         element : <OpenAIHelper />
       }
       ,{
-        path: "/GradWise/progress",
+        path: "progress",
         element : <ProgressTracker />
       }
       ,{
-        path: "/GradWise/courses",
+        path: "courses",
         element : <Courses />
       }
       ,{
-        path: "/GradWise/schedule",
+        path: "schedule",
         element : <Schedule />
       },
       {
-        path : "/GradWise/opportunities",
+        path : "opportunities",
         element : <Opportunities />
       },
       {
-        path : "/GradWise/portfolio",
+        path : "portfolio",
         element: <Portfolio />
       },
       {
-        path : "/GradWise/community",
+        path : "community",
         element: <Community />
       }
 
