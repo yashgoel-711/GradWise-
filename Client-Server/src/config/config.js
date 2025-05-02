@@ -1,2 +1,2 @@
-const BackendURL = "http:localhost:3000"
+const BackendURL = "http:13.234.29.211:3000"
 export{ BackendURL} 
