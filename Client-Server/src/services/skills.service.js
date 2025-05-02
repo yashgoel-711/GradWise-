@@ -12,7 +12,13 @@ export class SkillsService{
     }
     async getSkills(){
         try {
-            const response = await axios.get(`${BackendURL}/student/skills-student`,{ withCredentials: true });  
+            const response = await axios.post(`${BackendURL}/student/get-skills-student`,{
+                withCredentials: true,
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });  
+            console.log('response in skills service',response)
             return response;
         } catch (error) {
             console.error('backend service error student skills get failed :: ', error)

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import skillsService from '../../services/skills.service.js';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 const StudentProfile = () => {
   const { user } = useSelector((state) => state.trackAuth.studentData);
 
@@ -30,11 +31,8 @@ const StudentProfile = () => {
         about: user.about || '',
         profilePic: user.profilePic || '/api/placeholder/150/150',
       });
-
-      if (user.skills && Array.isArray(user.skills)) {
-        setSkills(user.skills);
-      }
     }
+
     const fetchSkills = async () => {
       try {
         const response = await skillsService.getSkills();
@@ -51,9 +49,9 @@ const StudentProfile = () => {
         toast.error("Failed to load skills.");
       }
     };
-  
+
     fetchSkills();
-  }, [user,skills]);
+  }, [user]);
 
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
@@ -92,7 +90,6 @@ const StudentProfile = () => {
   };
 
   const saveProfileChanges = () => {
-    // Add dispatch to backend if needed
     setEditingProfile(false);
   };
 
@@ -100,7 +97,7 @@ const StudentProfile = () => {
     setIsSaving(true);
     try {
       const skillNames = skills.map(skill => skill.name);
-      const response = await skillsService.updateSkills(skillNames); // send array of strings
+      const response = await skillsService.updateSkills(skillNames);
       toast.success("Skills updated successfully!");
     } catch (error) {
       console.error("Error updating skills:", error);
@@ -109,7 +106,6 @@ const StudentProfile = () => {
       setIsSaving(false);
     }
   };
-  
 
   const renderProfileSection = () => {
     if (editingProfile) {
