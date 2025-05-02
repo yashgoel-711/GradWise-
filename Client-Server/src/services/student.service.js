@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {BackendURL} from '../config/config.js'
+import {BackendURL} from "../config/config.js"
 export class StudentService{
    
 
@@ -20,8 +20,6 @@ export class StudentService{
 
     async login(data){
         try {
-            // console.log(data)
-            //     console.log(BackendURL)
             const response = await axios.post(`${BackendURL}/student/login-Student`, data ,{ withCredentials: true }); 
             console.log(response)                     
             return response;
