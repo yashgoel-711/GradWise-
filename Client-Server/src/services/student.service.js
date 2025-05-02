@@ -48,6 +48,25 @@ export class StudentService{
             console.error("backend service error student AiData failed",error)
         }
     }
+    async updateSkills(data){
+        try {
+            const response = await axios.post(`${BackendURL}/student/update-skills`,data,{ withCredentials: true });
+            if(response){
+                return response;
+            }
+        } catch (error) {
+            console.error("backend service error student skills update failed",error)
+            
+        }
+    }
+    async updateAvatar(avatarData){
+        try {
+           const response =  await axios.post("", avatarData , {withCredentials : true})
+           return response.data;
+        } catch (error) {
+            console.error("backend service error student avatar update failed",error)
+        }
+    }
 
 }
 

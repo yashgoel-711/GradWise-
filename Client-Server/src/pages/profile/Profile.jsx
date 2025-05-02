@@ -1,88 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import { Camera, X, Edit2, PlusCircle, Save } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSelector , useDispatch } from 'react-redux';
 import skillsService from '../../services/skills.service.js';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import studentService from '../../services/student.service.js';
 
 const StudentProfile = () => {
-  const { user } = useSelector((state) => state.trackAuth.studentData);
+  const { student } = useSelector((state) => state.trackAuth.studentData);
 
   const [profile, setProfile] = useState({
     name: '',
-    title: '',
-    university: '',
-    about: '',
-    profilePic: '/api/placeholder/150/150',
+    college: '',
+    year : '',
+    contact : '',
+    domain : '',
+    branch : ''     
   });
 
   const [skills, setSkills] = useState([]);
+
   const [isSaving, setIsSaving] = useState(false);
   const [editingProfile, setEditingProfile] = useState(false);
   const [editingSkills, setEditingSkills] = useState(false);
-  const [newSkill, setNewSkill] = useState({ name: '', level: 50 });
+  const [newSkill, setNewSkill] = useState("");
 
   useEffect(() => {
-    if (user) {
+   
       setProfile({
-        name: user.name || '',
-        title: user.title || '',
-        university: user.university || '',
-        about: user.about || '',
-        profilePic: user.profilePic || '/api/placeholder/150/150',
+        name: student.name || '',       
+        college: student.college || '',
+        year : student.year || '',
+        contact : student.contact || '',
+       domain : student.domain || 'not selected',
+       branch : student.branch || '' 
       });
-    }
+  
 
-    const fetchSkills = async () => {
-      try {
-        const response = await skillsService.getSkills();
-        if (Array.isArray(response.data)) {
-          const formattedSkills = response.data.map((skill, index) => ({
-            id: index + 1,
-            name: skill.name || skill,
-            level: skill.level || 50,
-          }));
-          setSkills(formattedSkills);
-        }
-      } catch (error) {
-        console.error("Error fetching skills:", error);
-        toast.error("Failed to load skills.");
-      }
-    };
+    
+      
+        const skills = student.skills ;
+       
+          setSkills(skills);
+       
+     
+    
 
-    fetchSkills();
-  }, [user]);
+   
+  }, [student]);
 
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
     setProfile(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleProfilePicChange = () => {
-    const randomId = Math.floor(Math.random() * 1000);
-    setProfile(prev => ({
-      ...prev,
-      profilePic: `/api/placeholder/150/150?id=${randomId}`,
-    }));
+  const handleavatarChange = async (avatarData) => {
+    await studentService.updateAvatar(avatarData)
+    
   };
 
-  const handleSkillLevelChange = (id, newLevel) => {
-    setSkills(skills.map(skill =>
-      skill.id === id ? { ...skill, level: newLevel } : skill
-    ));
-  };
 
-  const handleSkillNameChange = (id, newName) => {
-    setSkills(skills.map(skill =>
-      skill.id === id ? { ...skill, name: newName } : skill
-    ));
-  };
 
-  const handleAddSkill = () => {
-    if (newSkill.name.trim() === '') return;
-    const newId = Math.max(0, ...skills.map(s => s.id)) + 1;
-    setSkills([...skills, { ...newSkill, id: newId }]);
-    setNewSkill({ name: '', level: 50 });
+ 
+
+  const handleAddSkill = (newSkill) => {
+    if (newSkill.trim() === '') return;
+   
+    setSkills([...skills,  ...newSkill ]);
+    setNewSkill("");
   };
 
   const handleRemoveSkill = (id) => {
@@ -125,12 +110,12 @@ const StudentProfile = () => {
             <div className="flex flex-col items-center mb-4 md:mb-0 md:mr-6">
               <div className="relative">
                 <img
-                  src={profile.profilePic}
+                  src={profile.avatar}
                   alt="Profile"
                   className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
                 />
                 <button
-                  onClick={handleProfilePicChange}
+                  onClick={handleavatarChange}
                   className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"
                 >
                   <Camera size={16} />
@@ -160,11 +145,11 @@ const StudentProfile = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">University</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">college</label>
                 <input
                   type="text"
-                  name="university"
-                  value={profile.university}
+                  name="college"
+                  value={profile.college}
                   onChange={handleProfileChange}
                   className="w-full p-2 border border-gray-300 rounded"
                 />
@@ -196,7 +181,7 @@ const StudentProfile = () => {
         <div className="flex flex-col md:flex-row">
           <div className="flex flex-col items-center mb-4 md:mb-0 md:mr-6">
             <img
-              src={profile.profilePic}
+              src={profile.avatar}
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
             />
@@ -204,7 +189,7 @@ const StudentProfile = () => {
           <div>
             <h1 className="text-2xl font-bold mb-1">{profile.name}</h1>
             <p className="text-lg text-gray-600 mb-1">{profile.title}</p>
-            <p className="text-md text-gray-500 mb-4">{profile.university}</p>
+            <p className="text-md text-gray-500 mb-4">{profile.college}</p>
             <h3 className="text-lg font-semibold mb-2">About</h3>
             <p className="text-gray-700">{profile.about}</p>
           </div>

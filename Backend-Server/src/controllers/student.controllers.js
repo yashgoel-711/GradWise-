@@ -125,31 +125,29 @@ console.log('logout hitting');
       .clearCookie("token", options)
       .json(new apiResponse(200, {}, "student Logged Out"));
 });
-const updateStudentSkills = asyncAwaitHandler(async (req,res)=>{
+const updateStudentSkills = asyncAwaitHandler(async (req, res) => {
+  const { skills } = req.body;
+  const student = req.student;
 
-  console.log(req.body)
-  const skills  = req.body
   
-  if(!skills || skills.length === 0){
-    throw new apiError(400,"must pass skills to update")
+  if (!Array.isArray(skills) || skills.length === 0) {
+    throw new apiError(400, "Skills must be a non-empty array.");
   }
-  const studentskills = await Student.UpdateSkills(req.student._id,skills)
-  if(!studentskills){
-    throw new apiError(500,"error while updating skills")
-  }
-  return res.status(200).json(new apiResponse(200,studentskills,"successfully updated skills"))
-})
-const getStudentSkills = asyncAwaitHandler(async (req,res)=>{
-  const student = req.student
-  if(!student){
-    throw new apiError(400,"you must be logged IN")
-  }
-  const skills = await Student.getSkills(student._id)
-  if(!skills){
-    throw new apiError(500,"error while getting skills")
-  }
-  return res.status(200).json(new apiResponse(200,skills,"successfully got skills"))
-})
+  
+  student.skills = skills;
+  await student.save();
+  localStorage.setItem("studentData" , student);
+
+  return res
+    .status(200)
+    .json(new apiResponse(200, student.skills, "Successfully updated skills."));
+});
 
 
-export { registerStudent , loginStudent , logoutStudent,updateStudentSkills,getStudentSkills};
+
+
+
+
+
+
+export { registerStudent , loginStudent , logoutStudent,updateStudentSkills};

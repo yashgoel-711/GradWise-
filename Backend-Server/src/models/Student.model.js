@@ -65,61 +65,11 @@ studentSchema.pre("save", async function(next){
 studentSchema.methods.isPasswordCorrect = async function (password){
     return await bcrypt.compare(password,this.password)
 }
-studentSchema.statics.UpdateRoadmap = async function(studentId, taskArray) {
-    if (!studentId || !taskArray) {
-      throw new Error('Student ID and Task Array are required');
-    }
+
+
+
+
   
-    // Find the student document first
-    const student = await this.findById(studentId);
-    
-    if (!student) {
-      throw new Error('Student not found');
-    }
-  
-    // Update the roadmap
-    student.Roadmap = taskArray;
-  
-    // Save the updated document
-    await student.save();
-  
-    return student.Roadmap;
-  };
-  studentSchema.statics.UpdateSkills = async function(studentId, skillsArray) {
-    if (!studentId || !skillsArray) {
-      throw new Error('Student ID and Skills Array are required');
-    }
-  
-    // Find the student document first
-    const student = await this.findById(studentId);
-    
-    if (!student) {
-      throw new Error('Student not found');
-    }
-  
-    // Update the skills
-    student.skills = skillsArray;
-  
-    // Save the updated document
-    await student.save();
-  
-    return student.skills;
-  };
-  studentSchema.statics.getSkills = async function(studentId) {
-    if (!studentId) {
-      throw new Error('Student ID is required');
-    }
-  
-    // Find the student document first
-    const student = await this.findById(studentId);
-    
-    if (!student) {
-      throw new Error('Student not found');
-    }
-  
-    // Return the skills
-    return student.skills;
-  }
 
 
 studentSchema.methods.generateToken = async function(){
