@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      FrontEnd pages bnaooo tagde tagde.....🫡
+      FrontEnd pages bnaooo tagde tagde....🫡
     </>
   )
 }
