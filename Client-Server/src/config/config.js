@@ -1,2 +1,2 @@
-const BackendURL = "https://gradwise.onrender.com"
+const BackendURL = "https://localhost:3000"
 export{ BackendURL} 
