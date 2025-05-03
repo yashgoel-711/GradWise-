@@ -64,4 +64,5 @@ export const generateResume = asyncAwaitHandler(async (req, res) => {
     console.error("PDF generation failed:", err);
     throw new apiError(500, "Failed to generate resume PDF");
   });
+  
 });

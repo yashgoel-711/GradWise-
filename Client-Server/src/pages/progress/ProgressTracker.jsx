@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Loader } from "../../components/loader/Loader.jsx";
 import { useNavigate } from 'react-router'
 import ChatBot from "../../components/chatbot/ChatBot.jsx"
+// import { useSelector } from "react-redux";
 
 const progressService = new openAiService();
 
@@ -20,8 +21,8 @@ const ProgressTrackerPage = () => {
       if (!studentInfo) return;
 
       try {
-        const response = await progressService.AiData(studentInfo);
-        const roadmap = response?.data?.data?.roadmap || [];
+        // const response = await progressService.AiData(studentInfo);
+        const roadmap = studentInfo.Roadmap; // Assuming roadmap is part of studentInfo
 
         // Filter out unwanted values like "bullets"
         const filteredTasks = roadmap.filter((task) => task !== "bullets");
