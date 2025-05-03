@@ -69,7 +69,20 @@ Do not include any introduction, closing remarks, or extra explanation — just 
     .split('\n')
     .map(line => line.replace(/^[-•*\d.]+\s*/, '').trim()) // remove bullet symbols/numbers
     .filter(task => task.length > 0);
-  const TaskArray  = await Student.UpdateRoadmap(req.student._id,taskArray)
+  const TaskArray  = await Student.findById(req.student._id)
+    .then(student => {
+      if (!student) {
+        throw new apiError(404, "Student not found");
+      }
+      student.Roadmap = taskArray;
+      return student.save();
+    })
+    .then(updatedStudent => updatedStudent.Roadmap)
+    .catch(err => {
+      console.error("Error saving roadmap:", err);
+      throw new apiError(500, "Failed to save roadmap");
+    });
+
   console.log(TaskArray)
   // remove empty lines
 

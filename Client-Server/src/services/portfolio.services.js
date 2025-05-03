@@ -6,7 +6,7 @@ class ResumeService {
   async getDownloadLink() {
     try {
       const response = await axios.post(
-        `${BackendURL}`,
+        `${BackendURL}/api/resume/`, // URL
         {},
         {
           withCredentials: true,
@@ -15,7 +15,7 @@ class ResumeService {
           },
         }
       );
-
+      console.log("Response from server:", response.data); // Log the entire response for debugging
       const downloadLink = response.data.downloadLink;
       if (downloadLink) {
         return `${BackendURL}${downloadLink}`; // make it full URL
