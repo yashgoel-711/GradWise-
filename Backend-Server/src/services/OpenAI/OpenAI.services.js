@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_API_KEY = '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'
+const OPENROUTER_API_KEY = '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'
 
 
 const Ainvidia = async (prompt) => {

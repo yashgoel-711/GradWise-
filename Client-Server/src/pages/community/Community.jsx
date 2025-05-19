@@ -38,7 +38,7 @@ const Community = () => {
 
   const handleDiscordRedirect = () => {
     // Replace with your actual Discord invite link
-    window.open('https://discord.gg/cTfzHqVn', '_blank');
+    window.open('https://discord.gg/c4TEZQp2', '_blank');
   };
 
   const renderIcon = (iconName) => {
