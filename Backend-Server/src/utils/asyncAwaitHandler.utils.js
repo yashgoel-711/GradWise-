@@ -3,9 +3,10 @@ const asyncAwaitHandler = (func)=> {
         try {
             await func(req,res,next)
         } catch (error) {
-         res.status(500).json({
+         // apiError carries its own status code and message
+         res.status(error?.statusCode || 500).json({
             success : false,
-            message : "controller is not working in asyncHandler"
+            message : error?.statusCode ? error.message : "controller is not working in asyncHandler"
         })
         console.log(error)
     }

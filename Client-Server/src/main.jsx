@@ -7,7 +7,7 @@ import store from './store/store.js'
 import { Provider } from 'react-redux'
 
 import {UnAuthLayout , AuthLayout} from './layout/index.js'
-import { Home , About , Login , Register , Dashboard ,OpenAIHelper , ProgressTracker , Courses , Schedule , Opportunities ,Portfolio  , Profile, Community} from './pages/index.js'
+import { Home , About , Login , Register , Dashboard ,OpenAIHelper , ProgressTracker , Courses , Schedule , Opportunities ,Portfolio  , Profile, Community, Academics, Certifications} from './pages/index.js'
 
 const router  = createBrowserRouter([
   {
@@ -72,6 +72,14 @@ const router  = createBrowserRouter([
       {
         path : "profile",
         element: <Profile />
+      },
+      {
+        path : "academics",
+        element: <Academics />
+      },
+      {
+        path : "certifications",
+        element: <Certifications />
       }
 
     ]

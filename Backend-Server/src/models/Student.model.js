@@ -37,7 +37,15 @@ const studentSchema = new mongoose.Schema({
         required:true
     },
     skills : [String],
-    
+    // Same skills with a 0-100 proficiency; `skills` stays in sync (names only)
+    skillDetails : [{
+        name : { type:String, required:true },
+        level : { type:Number, default:50, min:0, max:100 },
+        _id : false
+    }],
+    // Indexes of finished steps in `Roadmap`
+    roadmapDone : [Number],
+
     domain : String,
 
     projects: [{

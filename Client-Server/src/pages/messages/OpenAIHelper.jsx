@@ -13,23 +13,32 @@ const OpenAIHelper = () => {
     e.preventDefault();
     if (!input.trim()) return;
   
-    const userMessage = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMessage]);
+    const prompt = input;
+    // Earlier successful turns, sent as context (errors are excluded)
+    const history = messages
+      .filter((m) => !m.error)
+      .map((m) => ({ role: m.role === "ai" ? "assistant" : "user", content: m.content }));
+
+    setMessages((prev) => [...prev, { role: "user", content: prompt }]);
     setLoading(true);
     setInput("");
-  
+
     try {
-      const res = await suggestionService.AiMessage({ prompt: input });
-  
+      const res = await suggestionService.AiMessage({ prompt, history });
+
       // Extract just the actual AI message
       const aiContent = res?.data?.data || "No response received.";
-  
+
       const aiMessage = { role: "ai", content: aiContent };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (err) {
+      const reason =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        "Something went wrong. Please try again.";
       setMessages((prev) => [
         ...prev,
-        { role: "ai", content: "Something went wrong. Please try again." }
+        { role: "ai", content: `⚠️ ${reason}`, error: true }
       ]);
     } finally {
       setLoading(false);
@@ -43,13 +52,6 @@ const OpenAIHelper = () => {
         <Sparkles className="text-purple-500" />
         <h2 className="text-xl font-semibold text-gray-800">Ask AI Mentor</h2>
       </div>
-      <img
-      onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
-    src="../../../public/Chatbot.png"
-    alt="Chatbot"
-    className="fixed bottom-6 right-6 w-30 h-30 cursor-pointer hover:scale-105 transition-transform z-50"
-  />
-
       <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
         <input
           type="text"

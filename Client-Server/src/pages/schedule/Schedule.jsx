@@ -13,8 +13,7 @@ import {
   subMonths,
 } from "date-fns";
 import { addNotification } from "../../store/features/notificationSlice.js";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { useNavigate } from 'react-router'
 import ChatBot from "../../components/chatbot/ChatBot"
 
@@ -254,7 +253,6 @@ const Schedule = () => {
         {renderCells()}
       </div>
       {renderSidebar()}
-      <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
 };

@@ -1,39 +1,85 @@
 import React, { useEffect, useState } from 'react';
-import InternshipService from '../../../services/internship.services.js'; // Adjust path as necessary
+import { Loader2, MapPin, Wallet } from 'lucide-react';
+import gradwiseService, { errorMessage } from '../../../services/gradwise.service.js';
 
 const Internships = () => {
   const [internships, setInternships] = useState([]);
+  const [source, setSource] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Fetch the internship data
+  const fetchInternships = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const data = await gradwiseService.getInternships();
+      setInternships(data.internships || []);
+      setSource(data.source || '');
+    } catch (err) {
+      setError(errorMessage(err, 'Could not load internships.'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchInternships = async () => {
-      try {
-        const data = await InternshipService.getInternships();
-        setInternships(data); // Set the fetched internships data
-      } catch (error) {
-        console.error('Error fetching internships:', error);
-      } finally {
-        setLoading(false); // Stop loading once data is fetched
-      }
-    };
-
     fetchInternships();
   }, []);
 
-  return (
-    <div className="p-4">
-      <h2 className="text-2xl font-semibold mb-4">Available Part-time Internships</h2>
+  if (loading) {
+    return (
+      <div className="flex justify-center py-8">
+        <Loader2 className="animate-spin text-green-600" size={28} />
+      </div>
+    );
+  }
 
-      {loading ? (
-        <p>Loading...</p>
+  if (error) {
+    return (
+      <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded flex items-center justify-between">
+        <span>{error}</span>
+        <button onClick={fetchInternships} className="underline font-medium">
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {source && (
+        <p className="text-xs text-gray-500 mb-3">
+          {source === 'Internshala'
+            ? 'Live listings from Internshala, ranked by how many of your skills match.'
+            : 'Live listings are unavailable right now, so these are suggested roles ranked by your skills.'}
+        </p>
+      )}
+
+      {internships.length === 0 ? (
+        <p className="text-gray-500">No internships found right now.</p>
       ) : (
         <ul className="space-y-4">
           {internships.map((internship, idx) => (
-            <li key={idx} className="p-4 bg-green-50 border rounded-lg flex justify-between items-center">
-              <div>
-                <h3 className="font-semibold text-lg">{internship.title}</h3>
-                <p className="text-sm text-gray-600">Apply by: {internship.applyBy}</p>
+            <li key={idx} className="p-4 bg-green-50 border border-green-100 rounded-lg flex justify-between items-start gap-4">
+              <div className="min-w-0">
+                <h3 className="font-semibold text-lg text-gray-800">{internship.title}</h3>
+                <p className="text-sm text-gray-600">{internship.company}</p>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 mt-1">
+                  <span className="flex items-center gap-1">
+                    <MapPin size={14} /> {internship.location}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Wallet size={14} /> {internship.stipend}
+                  </span>
+                </div>
+                {internship.matchedSkills?.length > 0 && (
+                  <span
+                    title={internship.matchedSkills.join(', ')}
+                    className="inline-block mt-2 px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800"
+                  >
+                    {internship.matchedSkills.length} skill{internship.matchedSkills.length > 1 ? 's' : ''} match: {internship.matchedSkills.join(', ')}
+                  </span>
+                )}
               </div>
               <a
                 href={internship.link}
