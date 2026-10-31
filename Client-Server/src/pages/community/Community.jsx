@@ -6,26 +6,26 @@ import React, { useState, useEffect } from 'react'
 import { ArrowUpRight, Users, Bell, BookOpen } from 'lucide-react'
 
 const Community = () => {
-  const [newsletters, setNewsletters] = useState([
+  const [newsletters] = useState([
     {
       id: 1,
-      title: "Welcome to Spring Semester!",
-      excerpt: "Check out our upcoming events and workshops for this semester.",
-      date: "April 15, 2025",
+      title: "Build your portfolio",
+      excerpt: "Add your best projects with a short summary and tech stack. They go straight into your AI-written resume.",
+      tag: "Tip",
       icon: "bell"
     },
     {
       id: 2,
-      title: "Hackathon Results Announced",
-      excerpt: "Congratulations to all participants in our annual coding competition.",
-      date: "April 10, 2025",
+      title: "Track your roadmap",
+      excerpt: "Tick off the steps in your career roadmap as you finish them and watch your progress grow on the dashboard.",
+      tag: "Tip",
       icon: "users"
     },
     {
       id: 3,
-      title: "New Learning Resources Available",
-      excerpt: "We've added new tutorials and practice exercises to help you master key concepts.",
-      date: "April 3, 2025",
+      title: "Find your skill gaps",
+      excerpt: "Pick a target role and let the AI mentor show which skills to learn next, with places to learn them.",
+      tag: "New",
       icon: "book"
     }
   ]);
@@ -94,7 +94,7 @@ const Community = () => {
                     </div>
                     <h3 className="text-xl font-medium text-gray-900">{newsletter.title}</h3>
                   </div>
-                  <span className="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded-full">{newsletter.date}</span>
+                  <span className="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded-full">{newsletter.tag}</span>
                 </div>
                 <p className="mt-2 text-gray-600 ml-12">{newsletter.excerpt}</p>
                 <button className="mt-4 ml-12 text-indigo-600 font-medium hover:text-indigo-800 transition-colors flex items-center group">

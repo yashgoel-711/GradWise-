@@ -3,7 +3,9 @@ import { Link , useNavigate} from 'react-router';
 import { useState } from 'react';
 import studentService from '../../services/student.service.js'; // Make sure to import the service
 import { useDispatch } from 'react-redux'
-import {login,logout } from '../../store/features/trackAuthSlice.js'
+import {login} from '../../store/features/trackAuthSlice.js'
+import axios from 'axios'
+import { BackendURL } from '../../config/config.js'
 
 export default function RegistrationPage() {
   const navigate = useNavigate()
@@ -32,20 +34,24 @@ export default function RegistrationPage() {
   const [submitError, setSubmitError] = useState(null);
   
   const onSubmit = async (data) => {
+    setSubmitError(null);
     try {
-      const response = await studentService.createAccount(data);
-      if(response){
-        dispatch(login(response))
-        // navigate("/GradWise/dashboard")
-        setSubmitSuccess(true);
-        setSubmitError(null);
+      // Avatar is optional; the backend accepts a plain JSON body
+      await axios.post(`${BackendURL}/student/register-Student`, data);
+
+      // Log in right away so the session cookie is set, and keep the student the same way Login.jsx does
+      const loginResponse = await studentService.login({ email: data.email, password: data.password });
+      const student = loginResponse?.data?.data?.student;
+      if (!student) {
+        throw new Error('Account created, but automatic login failed. Please log in.');
       }
-      console.log("Server Response:", response.data);
+      localStorage.setItem("studentData", JSON.stringify(student));
+      dispatch(login(student));
+      navigate("/GradWise/dashboard");
     } catch (error) {
       console.error("Error registering user:", error.response ? error.response.data : error.message);
-      setSubmitError(error.message || 'Failed to create account. Please try again.');
+      setSubmitError(error.response?.data?.message || error.message || 'Failed to create account. Please try again.');
     }
-    
   };
   
   const currentYear = new Date().getFullYear();

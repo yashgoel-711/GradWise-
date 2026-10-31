@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Navbar } from '../components/auth/index.js';
 import Loader from '../components/loader/Loader.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AuthLayout = () => {
   const navigate = useNavigate();
@@ -44,6 +46,7 @@ const AuthLayout = () => {
         <div className="p-4 h-full overflow-auto">
           <Outlet context={{ studentData }} />
         </div>
+        <ToastContainer position="bottom-right" autoClose={3000} />
       </div>
     </div>
   );

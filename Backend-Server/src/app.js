@@ -4,8 +4,18 @@ import cors from "cors"
 
 const app = express()
 
+// CORS_ORIGIN can hold several comma-separated origins. When one of them is localhost,
+// any localhost/127.0.0.1 port is allowed too (Vite moves to 5174 if 5173 is busy).
+const allowedOrigins = (process.env.CORS_ORIGIN || "").split(",").map((o) => o.trim().replace(/\/$/, "")).filter(Boolean)
+const allowLocalPorts = allowedOrigins.some((o) => /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o))
+
 app.use(cors({
-    origin : process.env.CORS_ORIGIN,
+    origin : (origin, callback) => {
+        const ok = !origin ||
+            allowedOrigins.includes(origin) ||
+            (allowLocalPorts && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin))
+        callback(null, ok ? origin : false)
+    },
     credentials : true
 }))
 app.use(express.static("public"))

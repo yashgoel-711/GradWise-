@@ -61,4 +61,18 @@ const getCourse = asyncAwaitHandler(async (req, res) => {
   });
   
 
-export { createCourse, getCourse };
+// List variant for GET: an empty list is a normal result, not a 404
+const listCourses = asyncAwaitHandler(async (req, res) => {
+  const courses = await Course.find({ uploadedBy: req.student._id }).sort({ createdAt: -1 });
+  return res.status(200).json(new apiResponse(200, courses, "Course details retrieved successfully"));
+});
+
+const deleteCourse = asyncAwaitHandler(async (req, res) => {
+  const removed = await Course.findOneAndDelete({ _id: req.params.id, uploadedBy: req.student._id });
+  if (!removed) {
+    throw new apiError(404, "Course not found");
+  }
+  return res.status(200).json(new apiResponse(200, {}, "Course deleted successfully"));
+});
+
+export { createCourse, getCourse, listCourses, deleteCourse };

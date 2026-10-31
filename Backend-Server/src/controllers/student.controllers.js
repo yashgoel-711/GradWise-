@@ -25,7 +25,7 @@ const registerStudent = asyncAwaitHandler(async (req, res) => {
   if (registeredStudents) {
     throw new apiError(409, "student already registered");
   }
-  const AvatarLocalPath = req.files?.Avatar[0]?.path;
+  const AvatarLocalPath = req.file?.path;
   let AvatarResponse;
   if (AvatarLocalPath) {
     AvatarResponse = await uploadOnCloudinary(AvatarLocalPath);
@@ -88,10 +88,12 @@ if (!loggedInStudent) {
   throw new apiError(500, "cant login...internal server error");
 }
 
+// Cross-site secure cookie in production; plain http cookie for local dev
+const isLocal = process.env.CORS_ORIGIN?.includes("localhost");
 const options = {
   httpOnly: true,
-  secure: true,
-  sameSite: 'None',
+  secure: !isLocal,
+  sameSite: isLocal ? 'Lax' : 'None',
 };
 
 return res

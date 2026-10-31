@@ -1,299 +1,285 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import { useOutletContext } from 'react-router'
-// All Redux-related imports are kept intact
-import WelcomeBanner from '../../components/auth/dashboard/WelcomeBanner'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Link } from 'react-router'
+import { useSelector } from 'react-redux'
+import { formatDistanceToNow } from 'date-fns'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import {
+  GraduationCap, Brain, FolderGit2, Award, Map, Sparkles, Plus, Target,
+  BookOpen, CircleAlert, RefreshCw
+} from 'lucide-react'
 import { NotificationBell } from '../../components/auth/dashboard/NotificationBell'
-import { useNavigate } from 'react-router'
-import { useDispatch, useSelector } from "react-redux";
 import ChatBot from '../../components/chatbot/ChatBot'
+import gradwiseService, { errorMessage } from '../../services/gradwise.service.js'
+
+const ACTIVITY_STYLE = {
+  project: { icon: FolderGit2, color: 'bg-blue-100 text-blue-500' },
+  certification: { icon: Award, color: 'bg-yellow-100 text-yellow-500' },
+  course: { icon: BookOpen, color: 'bg-purple-100 text-purple-500' },
+  academic: { icon: GraduationCap, color: 'bg-green-100 text-green-500' },
+}
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
-  const notificationslol = useSelector((state) => state.notification.notifications);
-  const isNavExpanded = useSelector((state) => state.navbar.isExpanded); // Get navbar state from Redux store
+  const isNavExpanded = useSelector((state) => state.navbar.isExpanded)
+  const reduxNotifications = useSelector((state) => state.notification.notifications)
 
-  function getTodayWithSuffix() {
-    const date = new Date();
-    const day = date.getDate();
-  
-    // Add suffix (st, nd, rd, th)
-    let suffix = "th";
-    if (day === 1 || day === 21 || day === 31) suffix = "st";
-    else if (day === 2 || day === 22) suffix = "nd";
-    else if (day === 3 || day === 23) suffix = "rd";
-  
-    const month = date.toLocaleString('default', { month: 'long' });
-    const year = date.getFullYear();
-  
-    return `${month} ${day}${suffix}, ${year}`;
-  }
-  const todayString = getTodayWithSuffix()
-  console.log(notificationslol)
-  const Navigate = useNavigate()
-  const [stats, setStats] = useState({
-    courses: 5,
-    assignments: 12,
-    upcomingDeadlines: 3,
-    completionRate: 68
-  })
- 
-  const notifications = [
-    { id: 1, message: "Your assignment was graded", time: "2 mins ago", read: false },
-    { id: 2, message: "New course added: AI Ethics", time: "1 hour ago", read: true },
-    { id: 3, message: "You've earned a badge for 7-day streak!", time: "Yesterday", read: false }
-  ];
-  const todayNotifications = notificationslol.filter((notif) => {
-    return notif.message.includes(todayString);
-  });
-  console.log("today notification ", todayNotifications)
-  const allNotifications = [...notifications, ...todayNotifications].reverse();
-  console.log(allNotifications)
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  const [recentActivities, setRecentActivities] = useState([
-    { id: 1, type: 'assignment', title: 'Research Paper Submission', course: 'Advanced Research Methods', date: '2025-04-18' },
-    { id: 2, type: 'grade', title: 'Mid-term Exam', course: 'Data Structures', grade: 'A-', date: '2025-04-15' },
-    { id: 3, type: 'enrollment', title: 'Course Enrollment', course: 'Machine Learning Fundamentals', date: '2025-04-10' },
-    { id: 4, type: 'feedback', title: 'Project Feedback', course: 'Software Engineering', date: '2025-04-08' }
-  ])
+  const load = useCallback(async () => {
+    setLoading(true)
+    setError('')
+    try {
+      setData(await gradwiseService.getDashboard())
+    } catch (err) {
+      setError(errorMessage(err, 'Could not load your dashboard.'))
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
-  // Dynamic classes based on navbar expansion state
-  const containerClass = isNavExpanded 
-    ? "p-6 bg-gray-100 min-h-screen transition-all duration-300" 
-    : "p-6 bg-gray-100 min-h-screen transition-all duration-300 ml-0";
+  useEffect(() => {
+    load()
+  }, [load])
 
-  // Content adjustment based on navbar state
+  const containerClass = isNavExpanded
+    ? 'p-6 bg-gray-100 min-h-screen transition-all duration-300'
+    : 'p-6 bg-gray-100 min-h-screen transition-all duration-300 ml-0'
   const contentClass = isNavExpanded
-    ? "w-full transition-all duration-300"
-    : "w-full transition-all duration-300 pl-16"; // Add padding when navbar is collapsed
+    ? 'w-full transition-all duration-300'
+    : 'w-full transition-all duration-300 pl-16'
+
+  const notifications = [...reduxNotifications]
+    .reverse()
+    .map((n) => ({ message: n.message, time: n.time ?? '', read: n.read ?? false }))
 
   return (
     <div className={containerClass}>
       <div className={contentClass}>
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
-          <NotificationBell notifications={allNotifications} />
+          <NotificationBell notifications={notifications} />
         </div>
-        
-        {/* chatbot */}
-        <ChatBot />
-    
-        <WelcomeBanner className="w-full" />
-        
-        {/* Stats Cards - Responsive Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-          <StatCard title="Active Courses" value={stats.courses} icon="books" color="blue" />
-          <StatCard title="Pending Assignments" value={stats.assignments} icon="document" color="yellow" />
-          <StatCard title="Upcoming Deadlines" value={stats.upcomingDeadlines} icon="calendar" color="red" />
-          <StatCard title="Completion Rate" value={`${stats.completionRate}%`} icon="chart" color="green" />
-        </div>
-        
-        {/* Main Content - Adjusted for Nav Collapse */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Course Progress */}
-          <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Course Progress</h2>
-            <div className="space-y-4">
-              <CourseProgress course="Data Structures" progress={75} />
-              <CourseProgress course="Advanced Research Methods" progress={60} />
-              <CourseProgress course="Software Engineering" progress={90} />
-              <CourseProgress course="Machine Learning Fundamentals" progress={30} />
-              <CourseProgress course="Academic Writing" progress={85} />
-            </div>
-          </div>
 
-          {/* Recent Activity */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-            <div className="space-y-4">
-              {recentActivities.map(activity => (
-                <ActivityItem key={activity.id} activity={activity} />
-              ))}
+        <ChatBot />
+
+        {loading && <DashboardSkeleton />}
+
+        {!loading && error && (
+          <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-6 flex items-center justify-between">
+            <div className="flex items-center gap-3 text-red-700">
+              <CircleAlert className="w-6 h-6" />
+              <span>{error}</span>
             </div>
+            <button
+              onClick={load}
+              className="flex items-center gap-2 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700"
+            >
+              <RefreshCw size={16} /> Retry
+            </button>
           </div>
-        </div>
-        
-        {/* Upcoming Deadlines */}
-        <div className="mt-8 bg-white rounded-lg shadow p-6 overflow-hidden">
-          <h2 className="text-xl font-semibold mb-4">Upcoming Deadlines</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assignment</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Final Project</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Software Engineering</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Apr 25, 2025</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">In Progress</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Research Paper</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Advanced Research Methods</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Apr 30, 2025</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Not Started</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Final Exam</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Data Structures</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 05, 2025</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Upcoming</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        )}
+
+        {!loading && !error && data && <DashboardContent data={data} />}
       </div>
     </div>
   )
 }
 
-// Helper Components
-const StatCard = ({ title, value, icon, color }) => {
-  const getIcon = () => {
-    switch (icon) {
-      case 'books':
-        return (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-        );
-      case 'document':
-        return (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-        );
-      case 'calendar':
-        return (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        );
-      case 'chart':
-        return (
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const getColorClass = () => {
-    switch (color) {
-      case 'blue': return 'bg-blue-100 text-blue-500';
-      case 'yellow': return 'bg-yellow-100 text-yellow-500';
-      case 'red': return 'bg-red-100 text-red-500';
-      case 'green': return 'bg-green-100 text-green-500';
-      default: return 'bg-gray-100 text-gray-500';
-    }
-  };
+const DashboardContent = ({ data }) => {
+  const { student, stats, gpaSeries, topSkills, roadmap, activity } = data
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 flex items-center">
-      <div className={`${getColorClass()} p-3 rounded-full mr-4`}>
-        {getIcon()}
+    <>
+      {/* Welcome banner */}
+      <div className="rounded-2xl shadow-md bg-gradient-to-br from-blue-500 to-indigo-600 p-6 text-white mb-6">
+        <h2 className="text-2xl md:text-3xl font-semibold mb-2">Welcome back, {student.name}! 🎓</h2>
+        <p className="text-sm md:text-base opacity-90">
+          {student.branch} · Year {student.year} · {student.college}
+        </p>
       </div>
-      <div>
-        <p className="text-sm font-medium text-gray-500">{title}</p>
-        <p className="text-2xl font-bold text-gray-900">{value}</p>
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6 mb-6">
+        <StatCard title="CGPA" value={stats.cgpa ?? '-'} icon={GraduationCap} color="green" />
+        <StatCard title="Skills" value={stats.skills} icon={Brain} color="blue" />
+        <StatCard title="Projects" value={stats.projects} icon={FolderGit2} color="purple" />
+        <StatCard title="Certifications" value={stats.certifications} icon={Award} color="yellow" />
+        <StatCard title="Roadmap" value={`${stats.roadmapPercent}%`} icon={Map} color="red" />
       </div>
-    </div>
-  );
-};
 
-const CourseProgress = ({ course, progress }) => {
-  return (
-    <div>
-      <div className="flex justify-between mb-1">
-        <span className="text-sm font-medium text-gray-700">{course}</span>
-        <span className="text-sm font-medium text-gray-500">{progress}%</span>
-      </div>
-      <div className="w-full bg-gray-200 rounded-full h-2.5">
-        <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
-      </div>
-    </div>
-  );
-};
-
-const ActivityItem = ({ activity }) => {
-  const getIcon = (type) => {
-    switch (type) {
-      case 'assignment':
-        return (
-          <div className="bg-blue-100 p-2 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-          </div>
-        );
-      case 'grade':
-        return (
-          <div className="bg-green-100 p-2 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-        );
-      case 'enrollment':
-        return (
-          <div className="bg-purple-100 p-2 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
-          </div>
-        );
-      case 'feedback':
-        return (
-          <div className="bg-yellow-100 p-2 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-            </svg>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
-  };
-
-  return (
-    <div className="flex items-center">
-      {getIcon(activity.type)}
-      <div className="ml-4">
-        <p className="text-sm font-medium text-gray-900">{activity.title}</p>
-        <div className="flex items-center">
-          <p className="text-sm text-gray-500">{activity.course}</p>
-          {activity.grade && (
-            <>
-              <span className="mx-1 text-gray-500">•</span>
-              <span className="text-sm font-medium text-green-600">{activity.grade}</span>
-            </>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        {/* GPA chart */}
+        <div className="bg-white rounded-xl shadow p-6 lg:col-span-2">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">GPA Trend</h3>
+          {gpaSeries.length > 0 ? (
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={gpaSeries}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="semester" />
+                  <YAxis domain={[0, 10]} />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="sgpa" name="SGPA" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <EmptyState text="No semesters recorded yet.">
+              <Link to="/GradWise/academics" className="text-indigo-600 hover:underline font-medium">
+                Add your first semester
+              </Link>
+            </EmptyState>
           )}
-          <span className="mx-1 text-gray-500">•</span>
-          <p className="text-sm text-gray-500">{formatDate(activity.date)}</p>
+        </div>
+
+        {/* Top skills */}
+        <div className="bg-white rounded-xl shadow p-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Top Skills</h3>
+          {topSkills.length > 0 ? (
+            <div className="space-y-4">
+              {topSkills.map((skill) => (
+                <ProgressBar key={skill.name} label={skill.name} value={skill.level} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState text="No skills added yet.">
+              <Link to="/GradWise/profile" className="text-indigo-600 hover:underline font-medium">
+                Add skills in your profile
+              </Link>
+            </EmptyState>
+          )}
         </div>
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Roadmap */}
+        <div className="bg-white rounded-xl shadow p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-800">Career Roadmap</h3>
+            <Link to="/GradWise/progress" className="text-sm text-indigo-600 hover:underline">View all</Link>
+          </div>
+          {roadmap.total > 0 ? (
+            <>
+              <ProgressBar label={`${roadmap.done} of ${roadmap.total} steps done`} value={stats.roadmapPercent} />
+              {roadmap.next.length > 0 ? (
+                <ul className="mt-4 space-y-2">
+                  {roadmap.next.map((step) => (
+                    <li key={step.index} className="flex gap-3 text-sm text-gray-700">
+                      <Target className="w-4 h-4 mt-0.5 text-indigo-500 shrink-0" />
+                      <span>{step.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-4 text-sm text-green-600">All steps completed. Great work!</p>
+              )}
+            </>
+          ) : (
+            <EmptyState text="You don't have a roadmap yet.">
+              <Link to="/GradWise/progress" className="text-indigo-600 hover:underline font-medium">
+                Generate one with AI
+              </Link>
+            </EmptyState>
+          )}
+        </div>
+
+        {/* Recent activity */}
+        <div className="bg-white rounded-xl shadow p-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Activity</h3>
+          {activity.length > 0 ? (
+            <ul className="space-y-4">
+              {activity.map((item, idx) => {
+                const { icon: Icon, color } = ACTIVITY_STYLE[item.type] ?? ACTIVITY_STYLE.project
+                return (
+                  <li key={idx} className="flex items-center gap-3">
+                    <div className={`${color} p-2 rounded-full`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">{item.text}</p>
+                      <p className="text-xs text-gray-500">
+                        {formatDistanceToNow(new Date(item.at), { addSuffix: true })}
+                      </p>
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <EmptyState text="Nothing here yet. Add a project, certification or semester to get started." />
+          )}
+        </div>
+      </div>
+
+      {/* Quick links */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <QuickLink to="/GradWise/OpenAI-Help" icon={Sparkles} label="Ask AI Mentor" className="bg-purple-600 hover:bg-purple-700" />
+        <QuickLink to="/GradWise/portfolio" icon={Plus} label="Add a project" className="bg-blue-600 hover:bg-blue-700" />
+        <QuickLink to="/GradWise/certifications" icon={Plus} label="Add a certification" className="bg-indigo-600 hover:bg-indigo-700" />
+      </div>
+    </>
+  )
+}
+
+const COLOR_CLASSES = {
+  blue: 'bg-blue-100 text-blue-500',
+  yellow: 'bg-yellow-100 text-yellow-500',
+  red: 'bg-red-100 text-red-500',
+  green: 'bg-green-100 text-green-500',
+  purple: 'bg-purple-100 text-purple-500',
+}
+
+const StatCard = ({ title, value, icon, color }) => (
+  <div className="bg-white rounded-xl shadow p-6 flex items-center">
+    <div className={`${COLOR_CLASSES[color]} p-3 rounded-full mr-4`}>
+      {React.createElement(icon, { className: 'h-7 w-7' })}
     </div>
-  );
-};
+    <div>
+      <p className="text-sm font-medium text-gray-500">{title}</p>
+      <p className="text-2xl font-bold text-gray-900">{value}</p>
+    </div>
+  </div>
+)
+
+const ProgressBar = ({ label, value }) => (
+  <div>
+    <div className="flex justify-between mb-1">
+      <span className="text-sm font-medium text-gray-700">{label}</span>
+      <span className="text-sm font-medium text-gray-500">{value}%</span>
+    </div>
+    <div className="w-full bg-gray-200 rounded-full h-2.5">
+      <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${value}%` }}></div>
+    </div>
+  </div>
+)
+
+const EmptyState = ({ text, children }) => (
+  <div className="py-8 text-center text-sm text-gray-500">
+    <p className="mb-1">{text}</p>
+    {children}
+  </div>
+)
+
+const QuickLink = ({ to, icon, label, className }) => (
+  <Link to={to} className={`${className} text-white rounded-xl shadow py-3 px-4 flex items-center justify-center gap-2 font-medium`}>
+    {React.createElement(icon, { size: 18 })} {label}
+  </Link>
+)
+
+const DashboardSkeleton = () => (
+  <div className="animate-pulse space-y-6">
+    <div className="h-28 bg-gray-200 rounded-2xl"></div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
+      {[...Array(5)].map((_, i) => (
+        <div key={i} className="h-24 bg-gray-200 rounded-xl"></div>
+      ))}
+    </div>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="h-72 bg-gray-200 rounded-xl lg:col-span-2"></div>
+      <div className="h-72 bg-gray-200 rounded-xl"></div>
+    </div>
+  </div>
+)
 
 export default Dashboard

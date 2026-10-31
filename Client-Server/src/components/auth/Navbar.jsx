@@ -3,6 +3,7 @@ import studentService from '../../services/student.service';
 import { useNavigate, useLocation } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleSidebar } from '../../store/features/navbarSlice.js'; // Import the action
+import { logout } from '../../store/features/trackAuthSlice.js';
 
 const Navbar = ({ studentData }) => {
   const Navigate = useNavigate();
@@ -24,8 +25,11 @@ const Navbar = ({ studentData }) => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     setIsLoading(true);
-    const response = await studentService.logout();
-    if(response){
+    try {
+      await studentService.logout();
+    } finally {
+      // Clear the client session even if the server call fails
+      dispatch(logout());
       setIsLoading(false);
       Navigate('/login')
     }
@@ -37,19 +41,7 @@ const Navbar = ({ studentData }) => {
   };
 
   // Helper function to check if route is active
-  const isRouteActive = (route) => {
-    if (route === 'dashboard' && activeRoute === 'dashboard') return true;
-    if (route === 'schedule' && activeRoute === 'schedule') return true;
-    if (route === 'courses' && activeRoute === 'courses') return true;
-    if (route === 'progress' && activeRoute === 'progress') return true;
-    if (route === 'OpenAI-Help' && activeRoute === 'OpenAI-Help') return true;
-    if (route === 'portfolio' && activeRoute === 'portfolio') return true;
-    if (route === 'opportunities' && activeRoute === 'opportunities') return true;
-    if (route === 'community' && activeRoute === 'community') return true;
-    if (route === 'settings' && activeRoute === 'settings') return true;
-    if (route === 'help' && activeRoute === 'help') return true;
-    return false;
-  }
+  const isRouteActive = (route) => activeRoute === route;
 
   return (
     <>
@@ -88,11 +80,32 @@ const Navbar = ({ studentData }) => {
               onClick={()=>{Navigate("/GradWise/dashboard")}} 
             />
             <NavItem 
-              icon="calendar" 
-              label="Schedule" 
+              icon="academics" 
+              label="Academics" 
               isExpanded={isExpanded} 
-              isActive={isRouteActive('schedule')} 
-              onClick={()=>{Navigate("/GradWise/schedule")}} 
+              isActive={isRouteActive('academics')} 
+              onClick={()=>{Navigate("/GradWise/academics")}} 
+            />
+            <NavItem 
+              icon="chart" 
+              label="Roadmap" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('progress')} 
+              onClick={()=>{Navigate("/GradWise/progress")}} 
+            />
+            <NavItem 
+              icon="portfolio" 
+              label="Portfolio" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('portfolio')} 
+              onClick={()=>{Navigate("/GradWise/portfolio")}}
+            />
+            <NavItem 
+              icon="certifications" 
+              label="Certifications" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('certifications')} 
+              onClick={()=>{Navigate("/GradWise/certifications")}}
             />
             <NavItem 
               icon="book" 
@@ -102,25 +115,11 @@ const Navbar = ({ studentData }) => {
               onClick={()=>{Navigate("/GradWise/courses")}}
             />
             <NavItem 
-              icon="chart" 
-              label="Progress" 
-              isExpanded={isExpanded} 
-              isActive={isRouteActive('progress')} 
-              onClick={()=>{Navigate("/GradWise/progress")}} 
-            />
-            <NavItem 
               icon="chat" 
-              label="Messages" 
+              label="AI Mentor" 
               isExpanded={isExpanded} 
               isActive={isRouteActive('OpenAI-Help')} 
               onClick={()=>{Navigate("/GradWise/OpenAI-Help")}}
-            />
-            <NavItem 
-              icon="portfolio" 
-              label="PortFolio" 
-              isExpanded={isExpanded} 
-              isActive={isRouteActive('portfolio')} 
-              onClick={()=>{Navigate("/GradWise/portfolio")}}
             />
             <NavItem 
               icon="opportunities" 
@@ -128,6 +127,13 @@ const Navbar = ({ studentData }) => {
               isExpanded={isExpanded} 
               isActive={isRouteActive('opportunities')} 
               onClick={()=>{Navigate("/GradWise/opportunities")}}
+            />
+            <NavItem 
+              icon="calendar" 
+              label="Schedule" 
+              isExpanded={isExpanded} 
+              isActive={isRouteActive('schedule')} 
+              onClick={()=>{Navigate("/GradWise/schedule")}} 
             />
             <NavItem 
               icon="community" 
@@ -260,6 +266,18 @@ const NavItem = ({ icon, label, isExpanded, isActive = false, onClick }) => {
         return (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+          </svg>
+        );
+      case 'academics':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422A12.083 12.083 0 0121 17.5M12 14l-6.16-3.422A12.083 12.083 0 003 17.5M12 14v7" />
+          </svg>
+        );
+      case 'certifications':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
           </svg>
         );
       case 'help':
